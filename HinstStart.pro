@@ -15,7 +15,9 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         StarterWindow.cpp \
-    DataContainer.cpp
+    FileListViewModel.cpp \
+    FileListData.cpp
 
 HEADERS  += StarterWindow.h \
-    DataContainer.h
+    FileListViewModel.h \
+    FileListData.h

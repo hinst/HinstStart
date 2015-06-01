@@ -8,16 +8,8 @@
 #include <QLayout>
 #include <QLineEdit>
 #include <QThread>
-#include "DataContainer.h"
-
-class FileListViewModel : public QAbstractListModel {
-public:
-	DataContainer *dataContainer;
-	int rowCount(const QModelIndex & parent = QModelIndex()) const override;
-	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-private:
-	void WriteLog(QString text) const;
-};
+#include "FileListData.h"
+#include "FileListViewModel.h"
 
 class StarterWindow : public QMainWindow
 {
@@ -27,7 +19,7 @@ public:
     ~StarterWindow();
 	void load();
 private:
-    DataContainer dataContainer;
+	FileListData dataContainer;
     QListView* fileListView;
 	FileListViewModel* fileListViewModel;
 	QWidget *rootWidget;

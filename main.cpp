@@ -1,6 +1,6 @@
 #include <QApplication>
 #include "StarterWindow.h"
-#include "DataContainer.h"
+#include "FileListData.h"
 
 int main(int argc, char *argv[])
 {

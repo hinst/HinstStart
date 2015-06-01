@@ -1,25 +1,25 @@
-#include "DataContainer.h"
+#include "FileListData.h"
 
-DataContainer::DataContainer()
+FileListData::FileListData()
 {
 
 }
 
-void DataContainer::setPaths()
+void FileListData::setPaths()
 {
     this->userStartMenuPath = QDir::homePath() + "/" + UserStartMenuSubPath;
 	WriteLog("userStartMenuPath = '" + userStartMenuPath + "'");
     this->commonStartMenuPath = CommonStartMenuPath;
 }
 
-void DataContainer::load()
+void FileListData::load()
 {
 	this->files.clear();
     this->setPaths();
 	this->loadFiles(this->userStartMenuPath);
 }
 
-void DataContainer::loadFiles(QString directoryPath)
+void FileListData::loadFiles(QString directoryPath)
 {
 	QDir qDirectory(directoryPath);
 	auto files = qDirectory.entryInfoList();
@@ -36,7 +36,7 @@ void DataContainer::loadFiles(QString directoryPath)
 	}
 }
 
-void DataContainer::loadFile(QFileInfo fileInfo)
+void FileListData::loadFile(QFileInfo fileInfo)
 {
 	if (fileInfo.isDir())
 	{
@@ -48,7 +48,7 @@ void DataContainer::loadFile(QFileInfo fileInfo)
 	}
 }
 
-void DataContainer::WriteLog(QString text)
+void FileListData::WriteLog(QString text)
 {
 	qDebug() << (QString("DataContainer") + text);
 }

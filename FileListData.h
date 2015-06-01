@@ -9,10 +9,10 @@
 const QString UserStartMenuSubPath("AppData/Roaming/Microsoft/Windows/Start Menu");
 const QString CommonStartMenuPath("C:/ProgramData/Microsoft/Windows/Start Menu");
 
-class DataContainer
+class FileListData
 {
 public:
-    DataContainer();
+	FileListData();
     QList<QFileInfo> files;
     QString userStartMenuPath;
     QString commonStartMenuPath;
