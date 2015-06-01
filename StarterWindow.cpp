@@ -9,6 +9,7 @@ StarterWindow::StarterWindow(QWidget *parent)
 	searchLineEdit = new QLineEdit();
 	rootLayout->addWidget(searchLineEdit);
 	fileListView = new QListView();
+	fileListView->setIconSize(QSize(32, 32));
 	fileListData = nullptr;
 	fileListViewModel = nullptr;
 	sortFilterProxyModel = nullptr;

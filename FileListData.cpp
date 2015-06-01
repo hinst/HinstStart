@@ -60,7 +60,10 @@ void FileListData::loadIcons()
 	icons.clear();
 	for (int i = 0; i < files.count(); i++)
 	{
-		const auto icon = fileIconProvider->icon(files[i]);
+		auto fileInfo = files[i];
+		if (fileInfo.isSymLink())
+			fileInfo = QFileInfo(fileInfo.symLinkTarget());
+		const auto icon = fileIconProvider->icon(fileInfo);
 		icons.append(icon);
 	}
 	delete fileIconProvider;
