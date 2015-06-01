@@ -45,7 +45,6 @@ void DataContainer::loadFile(QFileInfo fileInfo)
 	else
 	{
 		this->files.append(fileInfo);
-		WriteLog(fileInfo.filePath());
 	}
 }
 
