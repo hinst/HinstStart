@@ -4,8 +4,9 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT += core gui
 CONFIG += console
+CONFIG += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,6 +14,8 @@ TARGET = HinstStart
 TEMPLATE = app
 
 SOURCES += main.cpp\
-        StarterWindow.cpp
+        StarterWindow.cpp \
+    DataContainer.cpp
 
-HEADERS  += StarterWindow.h
+HEADERS  += StarterWindow.h \
+    DataContainer.h

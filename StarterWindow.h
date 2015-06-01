@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QWidget>
 #include <QListView>
+#include <QDebug>
+#include "DataContainer.h"
 
 class StarterWindow : public QMainWindow
 {
@@ -12,6 +14,7 @@ public:
     StarterWindow(QWidget *parent = 0);
     ~StarterWindow();
 private:
+    DataContainer dataContainer;
     QListView* fileListView;
 };
 

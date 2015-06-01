@@ -1,5 +1,6 @@
-#include "StarterWindow.h"
 #include <QApplication>
+#include "StarterWindow.h"
+#include "DataContainer.h"
 
 int main(int argc, char *argv[])
 {
