@@ -5,6 +5,9 @@
 #include <QList>
 #include <QString>
 #include <QDebug>
+#include <QIcon>
+#include <QFileIconProvider>
+#include <memory>
 
 const QString UserStartMenuSubPath("AppData/Roaming/Microsoft/Windows/Start Menu");
 const QString CommonStartMenuPath("C:/ProgramData/Microsoft/Windows/Start Menu");
@@ -16,12 +19,14 @@ public:
     QList<QFileInfo> files;
     QString userStartMenuPath;
     QString commonStartMenuPath;
-    void load();
+	QList<QIcon> icons;
 private:
-    void setPaths();
+	void load();
+	void setPaths();
 	void loadFiles(QString directoryPath);
 	void loadFile(QFileInfo fileInfo);
 	void WriteLog(QString text);
+	void loadIcons();
 };
 
 #endif // DATACONTAINER_H

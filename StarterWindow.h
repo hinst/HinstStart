@@ -18,9 +18,13 @@ class StarterWindow : public QMainWindow
 public:
     StarterWindow(QWidget *parent = 0);
     ~StarterWindow();
-	void load();
+	void loadFileList();
+	/** Clears model of fileListView; deletes fileListViewModel, sortFilterProxyModel. */
+	void unloadFileList();
+public slots:
+	void receiveSearchLineEditTextChanged(const QString &text);
 private:
-	FileListData dataContainer;
+	FileListData *fileListData;
     QListView* fileListView;
 	FileListViewModel* fileListViewModel;
 	QSortFilterProxyModel *sortFilterProxyModel;

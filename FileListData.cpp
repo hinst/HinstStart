@@ -2,7 +2,7 @@
 
 FileListData::FileListData()
 {
-
+	load();
 }
 
 void FileListData::setPaths()
@@ -17,6 +17,7 @@ void FileListData::load()
 	this->files.clear();
     this->setPaths();
 	this->loadFiles(this->userStartMenuPath);
+	this->loadIcons();
 }
 
 void FileListData::loadFiles(QString directoryPath)
@@ -51,5 +52,17 @@ void FileListData::loadFile(QFileInfo fileInfo)
 void FileListData::WriteLog(QString text)
 {
 	qDebug() << (QString("DataContainer") + text);
+}
+
+void FileListData::loadIcons()
+{
+	auto fileIconProvider = new QFileIconProvider();
+	icons.clear();
+	for (int i = 0; i < files.count(); i++)
+	{
+		const auto icon = fileIconProvider->icon(files[i]);
+		icons.append(icon);
+	}
+	delete fileIconProvider;
 }
 

@@ -2,6 +2,7 @@
 #define FILELISTVIEWMODEL_H
 
 #include <QListView>
+#include <QList>
 #include "FileListData.h"
 
 class FileListViewModel : public QAbstractListModel
@@ -10,9 +11,10 @@ public:
 	FileListViewModel();
 	int rowCount(const QModelIndex & parent = QModelIndex()) const override;
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-	FileListData *fileListData;
+	void setFileListData(FileListData *fileListData);
 private:
-	void WriteLog(QString text) const;
+	FileListData *fileListData;
+	void writeLog(QString text) const;
 };
 
 #endif // FILELISTVIEWMODEL_H

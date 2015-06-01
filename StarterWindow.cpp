@@ -9,20 +9,52 @@ StarterWindow::StarterWindow(QWidget *parent)
 	searchLineEdit = new QLineEdit();
 	rootLayout->addWidget(searchLineEdit);
 	fileListView = new QListView();
+	fileListData = nullptr;
 	fileListViewModel = nullptr;
 	sortFilterProxyModel = nullptr;
 	rootLayout->addWidget(fileListView);
 	rootWidget->setLayout(rootLayout);
+	QObject::connect(searchLineEdit, SIGNAL(textChanged(QString)), this, SLOT(receiveSearchLineEditTextChanged(QString)));
 }
 
 StarterWindow::~StarterWindow()
 {
-	delete fileListViewModel;
+	unloadFileList();
 }
 
-void StarterWindow::load()
+void StarterWindow::receiveSearchLineEditTextChanged(const QString& text)
+{
+	if (sortFilterProxyModel != nullptr)
+	{
+		sortFilterProxyModel->setFilterFixedString(text);
+	}
+}
+
+void StarterWindow::loadFileList()
+{
+	unloadFileList();
+	fileListData = new FileListData();
+	fileListViewModel = new FileListViewModel();
+	fileListViewModel->setFileListData(fileListData);
+	sortFilterProxyModel = new QSortFilterProxyModel();
+	sortFilterProxyModel->setSourceModel(fileListViewModel);
+	sortFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+	fileListView->setModel(sortFilterProxyModel);
+}
+
+void StarterWindow::WriteLog(QString text)
+{
+	qDebug() << text;
+}
+
+void StarterWindow::unloadFileList()
 {
 	fileListView->setModel(nullptr);
+	if (fileListData != nullptr)
+	{
+		delete fileListData;
+		fileListData = nullptr;
+	}
 	if (sortFilterProxyModel != nullptr)
 	{
 		delete sortFilterProxyModel;
@@ -33,15 +65,4 @@ void StarterWindow::load()
 		delete fileListViewModel;
 		fileListViewModel = nullptr;
 	}
-	dataContainer.load();
-	fileListViewModel = new FileListViewModel();
-	fileListViewModel->fileListData = &dataContainer;
-	sortFilterProxyModel = new QSortFilterProxyModel();
-	sortFilterProxyModel->setSourceModel(fileListViewModel);
-	fileListView->setModel(sortFilterProxyModel);
-}
-
-void StarterWindow::WriteLog(QString text)
-{
-	qDebug() << text;
 }

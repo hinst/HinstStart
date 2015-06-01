@@ -23,15 +23,26 @@ QVariant FileListViewModel::data(const QModelIndex &index, int role) const
 	QVariant result = QVariant::Invalid;
 	if (fileListData != nullptr)
 	{
+		auto itemIndex = index.row();
 		if (role == Qt::DisplayRole)
 		{
-			result = fileListData->files[index.row()].fileName();
+			result = fileListData->files[itemIndex].fileName();
+		}
+		else if (role == Qt::DecorationRole)
+		{
+			result = fileListData->icons[itemIndex];
 		}
 	}
 	return result;
 }
 
-void FileListViewModel::WriteLog(QString text) const
+void FileListViewModel::setFileListData(FileListData *fileListData)
+{
+	this->fileListData = fileListData;
+}
+
+void FileListViewModel::writeLog(QString text) const
 {
 	qDebug() << text;
 }
+

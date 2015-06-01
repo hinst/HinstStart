@@ -7,6 +7,6 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     StarterWindow w;
 	w.showMaximized();
-	w.load();
+	w.loadFileList();
     return a.exec();
 }
