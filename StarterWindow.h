@@ -8,6 +8,7 @@
 #include <QLayout>
 #include <QLineEdit>
 #include <QThread>
+#include <QSortFilterProxyModel>
 #include "FileListData.h"
 #include "FileListViewModel.h"
 
@@ -22,6 +23,7 @@ private:
 	FileListData dataContainer;
     QListView* fileListView;
 	FileListViewModel* fileListViewModel;
+	QSortFilterProxyModel *sortFilterProxyModel;
 	QWidget *rootWidget;
 	QVBoxLayout* rootLayout;
 	QLineEdit* searchLineEdit;

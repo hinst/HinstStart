@@ -9,21 +9,36 @@ StarterWindow::StarterWindow(QWidget *parent)
 	searchLineEdit = new QLineEdit();
 	rootLayout->addWidget(searchLineEdit);
 	fileListView = new QListView();
-	fileListViewModel = new FileListViewModel();
+	fileListViewModel = nullptr;
+	sortFilterProxyModel = nullptr;
 	rootLayout->addWidget(fileListView);
 	rootWidget->setLayout(rootLayout);
 }
 
 StarterWindow::~StarterWindow()
 {
-
+	delete fileListViewModel;
 }
 
 void StarterWindow::load()
 {
-	this->dataContainer.load();
-	fileListViewModel->dataContainer = &dataContainer;
-	fileListView->setModel(fileListViewModel);
+	fileListView->setModel(nullptr);
+	if (sortFilterProxyModel != nullptr)
+	{
+		delete sortFilterProxyModel;
+		sortFilterProxyModel = nullptr;
+	}
+	if (fileListViewModel != nullptr)
+	{
+		delete fileListViewModel;
+		fileListViewModel = nullptr;
+	}
+	dataContainer.load();
+	fileListViewModel = new FileListViewModel();
+	fileListViewModel->fileListData = &dataContainer;
+	sortFilterProxyModel = new QSortFilterProxyModel();
+	sortFilterProxyModel->setSourceModel(fileListViewModel);
+	fileListView->setModel(sortFilterProxyModel);
 }
 
 void StarterWindow::WriteLog(QString text)
