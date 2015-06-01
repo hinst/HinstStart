@@ -5,12 +5,12 @@
 #-------------------------------------------------
 
 QT       += core gui
+CONFIG += console
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = HinstStart
 TEMPLATE = app
-
 
 SOURCES += main.cpp\
         StarterWindow.cpp
