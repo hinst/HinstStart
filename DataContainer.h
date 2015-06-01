@@ -17,9 +17,11 @@ public:
     QString userStartMenuPath;
     QString commonStartMenuPath;
     void load();
-    void loadFiles(QString directory);
 private:
     void setPaths();
+	void loadFiles(QString directoryPath);
+	void loadFile(QFileInfo fileInfo);
+	void WriteLog(QString text);
 };
 
 #endif // DATACONTAINER_H
