@@ -11,6 +11,7 @@
 #include <QSortFilterProxyModel>
 #include "FileListData.h"
 #include "FileListViewModel.h"
+#include "CommonUI.h"
 
 class StarterWindow : public QMainWindow
 {

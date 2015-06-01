@@ -7,6 +7,8 @@
 #include <QDebug>
 #include <QIcon>
 #include <QFileIconProvider>
+#include <QSharedPointer>
+#include <QThread>
 #include <memory>
 
 const QString UserStartMenuSubPath("AppData/Roaming/Microsoft/Windows/Start Menu");

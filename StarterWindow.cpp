@@ -7,9 +7,11 @@ StarterWindow::StarterWindow(QWidget *parent)
 	setCentralWidget(rootWidget);
 	rootLayout = new QVBoxLayout();
 	searchLineEdit = new QLineEdit();
+	searchLineEdit->setFont(CommonUI::globalObject.fixedFont());
 	rootLayout->addWidget(searchLineEdit);
 	fileListView = new QListView();
 	fileListView->setIconSize(QSize(32, 32));
+	fileListView->setFont(CommonUI::globalObject.fixedFont());
 	fileListData = nullptr;
 	fileListViewModel = nullptr;
 	sortFilterProxyModel = nullptr;
