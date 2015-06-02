@@ -3,12 +3,14 @@
 
 #include <QMainWindow>
 #include <QWidget>
-#include <QListView>
+#include <QTableView>
 #include <QDebug>
 #include <QLayout>
 #include <QLineEdit>
 #include <QThread>
 #include <QSortFilterProxyModel>
+#include <QHeaderView>
+#include <QTableWidgetItem>
 #include "FileListData.h"
 #include "FileListViewModel.h"
 #include "CommonUI.h"
@@ -26,7 +28,7 @@ public slots:
 	void receiveSearchLineEditTextChanged(const QString &text);
 private:
 	FileListData *fileListData;
-    QListView* fileListView;
+	QTableView* fileListView;
 	FileListViewModel* fileListViewModel;
 	QSortFilterProxyModel *sortFilterProxyModel;
 	QWidget *rootWidget;

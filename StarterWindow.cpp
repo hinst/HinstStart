@@ -9,9 +9,12 @@ StarterWindow::StarterWindow(QWidget *parent)
 	searchLineEdit = new QLineEdit();
 	searchLineEdit->setFont(CommonUI::globalObject.fixedFont());
 	rootLayout->addWidget(searchLineEdit);
-	fileListView = new QListView();
+	fileListView = new QTableView();
 	fileListView->setIconSize(QSize(32, 32));
 	fileListView->setFont(CommonUI::globalObject.fixedFont());
+	fileListView->verticalHeader()->setVisible(false);
+	fileListView->verticalHeader()->resizeSections(QHeaderView::Fixed);
+	fileListView->verticalHeader()->setDefaultSectionSize(34);
 	fileListData = nullptr;
 	fileListViewModel = nullptr;
 	sortFilterProxyModel = nullptr;
@@ -43,6 +46,7 @@ void StarterWindow::loadFileList()
 	sortFilterProxyModel->setSourceModel(fileListViewModel);
 	sortFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 	fileListView->setModel(sortFilterProxyModel);
+	fileListView->setColumnWidth(0, 300);
 }
 
 void StarterWindow::WriteLog(QString text)

@@ -1,7 +1,7 @@
 #include "FileListViewModel.h"
 
 FileListViewModel::FileListViewModel()
-	: QAbstractListModel()
+	: QAbstractTableModel()
 {
 	fileListData = nullptr;
 }
@@ -18,19 +18,44 @@ int FileListViewModel::rowCount(const QModelIndex &parent) const
 	}
 }
 
+int FileListViewModel::columnCount(const QModelIndex &parent) const
+{
+	return 1;
+}
+
 QVariant FileListViewModel::data(const QModelIndex &index, int role) const
 {
 	QVariant result = QVariant::Invalid;
 	if (fileListData != nullptr)
 	{
-		auto itemIndex = index.row();
-		if (role == Qt::DisplayRole)
+		auto rowIndex = index.row();
+		auto columnIndex = index.column();
+		if (columnIndex == 0)
 		{
-			result = fileListData->files[itemIndex].fileName();
+			if (role == Qt::DisplayRole)
+			{
+				result = fileListData->files[rowIndex].fileName();
+			}
+			else if (role == Qt::DecorationRole)
+			{
+				result = fileListData->icons[rowIndex];
+			}
 		}
-		else if (role == Qt::DecorationRole)
+	}
+	return result;
+}
+
+QVariant FileListViewModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+	QVariant result = QVariant::Invalid;
+	if (orientation == Qt::Horizontal)
+	{
+		if (section == 0)
 		{
-			result = fileListData->icons[itemIndex];
+			if (role == Qt::DisplayRole)
+			{
+				result = "Name";
+			}
 		}
 	}
 	return result;
