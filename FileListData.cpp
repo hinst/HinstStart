@@ -54,6 +54,26 @@ void FileListData::WriteLog(QString text)
 	qDebug() << (QString("DataContainer") + text);
 }
 
+QIcon FileListData::loadIcon(QString filePath)
+{
+	QIcon result;
+	auto filePathWideChars = new wchar_t[filePath.length() + 1];
+	filePath = filePath.replace('/', '\\');
+	filePath.toWCharArray(filePathWideChars);
+	filePathWideChars[filePath.length()] = 0;
+	auto fileInfo = new SHFILEINFO();
+	this->WriteLog("Now loading icon for file " + filePath);
+	if (SHGetFileInfoW(filePathWideChars, FILE_ATTRIBUTE_NORMAL, fileInfo, sizeof(SHFILEINFO), SHGFI_ICON | SHGFI_LARGEICON))
+	{
+		result = QIcon(QtWin::fromHICON(fileInfo->hIcon));
+		this->WriteLog("Icon loaded");
+	}
+	delete[] filePathWideChars;
+	DestroyIcon(fileInfo->hIcon);
+	delete fileInfo;
+	return result;
+}
+
 void FileListData::loadIcons()
 {
 	auto fileIconProvider = new QFileIconProvider();
@@ -63,7 +83,7 @@ void FileListData::loadIcons()
 		auto fileInfo = files[i];
 		if (fileInfo.isSymLink())
 			fileInfo = QFileInfo(fileInfo.symLinkTarget());
-		const auto icon = fileIconProvider->icon(fileInfo);
+		const auto icon = loadIcon(fileInfo.absoluteFilePath());
 		icons.append(icon);
 	}
 	delete fileIconProvider;

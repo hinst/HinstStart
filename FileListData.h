@@ -10,6 +10,8 @@
 #include <QSharedPointer>
 #include <QThread>
 #include <memory>
+#include <windows.h>
+#include <QtWinExtras/QtWin>
 
 const QString UserStartMenuSubPath("AppData/Roaming/Microsoft/Windows/Start Menu");
 const QString CommonStartMenuPath("C:/ProgramData/Microsoft/Windows/Start Menu");
@@ -28,6 +30,7 @@ private:
 	void loadFiles(QString directoryPath);
 	void loadFile(QFileInfo fileInfo);
 	void WriteLog(QString text);
+	QIcon loadIcon(QString filePath);
 	void loadIcons();
 };
 
