@@ -5,16 +5,14 @@
 #include <QObject>
 #include <QEvent>
 #include <QCoreApplication>
+#include <QElapsedTimer>
 #include "FileListData.h"
 
-class FileListDataLoader : public QObject
+class FileListDataLoader : public QThread
 {
 	Q_OBJECT
 public:
-	explicit FileListDataLoader(QObject *parent = 0);
-    static QEvent::Type pokeEventType();
-	bool event(QEvent *event) override;
-	void load();
+    void run() override;
     // Objet to notify when loading is completed;
     QObject* objectToNotifyWhenLoaded;
     // Send this event type when loading is compledted;
@@ -22,7 +20,9 @@ public:
     class LoadedEvent : public QEvent
     {
     public:
-        shared_ptr<FileListData> fileListData;
+        LoadedEvent(QEvent::Type eventType);
+        std::shared_ptr<FileListData> fileListData;
+        QThread* thread;
     };
 };
 

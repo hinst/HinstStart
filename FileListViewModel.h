@@ -13,9 +13,9 @@ public:
 	int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 	QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-	void setFileListData(FileListData *fileListData);
+    void setFileListData(std::shared_ptr<FileListData> fileListData);
 private:
-	FileListData *fileListData;
+    std::shared_ptr<FileListData> fileListData;
 	void writeLog(QString text) const;
 };
 

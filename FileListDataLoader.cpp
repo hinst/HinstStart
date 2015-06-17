@@ -1,38 +1,23 @@
 #include "FileListDataLoader.h"
 
-FileListDataLoader::FileListDataLoader(QObject *parent) : QObject(parent)
-{
-}
-
-QEvent::Type FileListDataLoader::pokeEventType()
-{
-	return (QEvent::Type)(QEvent::User + 1);
-}
-
-bool FileListDataLoader::event(QEvent *event)
-{
-	bool result = false;
-	if (event->type() == pokeEventType())
-	{
-		load();
-		result = true;
-	}
-	else
-	{
-		result = this->QObject::event(event);
-	}
-	return result;
-}
-
-void FileListDataLoader::load()
+void FileListDataLoader::run()
 {
 	std::shared_ptr<FileListData> fileListData(new FileListData());
+    QElapsedTimer timer;
+    timer.start();
 	fileListData->load();
+    qDebug() << timer.elapsed();
     if (objectToNotifyWhenLoaded != nullptr)
     {
-        auto loadedEvent = new LoadedEvent();
+        auto loadedEvent = new LoadedEvent(this->eventTypeToNotifyWhenLoaded);
         loadedEvent->fileListData = fileListData;
+        loadedEvent->thread = this;
         QCoreApplication::postEvent(objectToNotifyWhenLoaded, loadedEvent);
     }
 }
 
+
+
+FileListDataLoader::LoadedEvent::LoadedEvent(QEvent::Type eventType) : QEvent(eventType)
+{
+}

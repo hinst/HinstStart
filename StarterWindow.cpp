@@ -15,7 +15,6 @@ StarterWindow::StarterWindow(QWidget *parent)
 	fileListView->verticalHeader()->setVisible(false);
 	fileListView->verticalHeader()->resizeSections(QHeaderView::Fixed);
 	fileListView->verticalHeader()->setDefaultSectionSize(34);
-	fileListData = nullptr;
 	fileListViewModel = nullptr;
 	sortFilterProxyModel = nullptr;
 	rootLayout->addWidget(fileListView);
@@ -38,7 +37,19 @@ void StarterWindow::receiveSearchLineEditTextChanged(const QString& text)
 
 bool StarterWindow::event(QEvent *event)
 {
-    if (event->type() == )
+    auto result = false;
+    if (event->type() == fileListDataLoadedEventType())
+    {
+        auto loadedEvent = (FileListDataLoader::LoadedEvent*)event;
+        receiveFileList(loadedEvent->fileListData);
+        delete loadedEvent->thread;
+        result = true;
+    }
+    else
+    {
+        result = this->QMainWindow::event(event);
+    }
+    return result;
 }
 
 void StarterWindow::loadFileList()
@@ -54,12 +65,15 @@ void StarterWindow::loadFileList()
 	fileListView->setModel(sortFilterProxyModel);
 	fileListView->setColumnWidth(0, 300);
     */
-    QThread *loaderThread = new
+    auto *loaderThread = new FileListDataLoader();
+    loaderThread->objectToNotifyWhenLoaded = this;
+    loaderThread->eventTypeToNotifyWhenLoaded = fileListDataLoadedEventType();
+    loaderThread->start();
 }
 
 void StarterWindow::WriteLog(QString text)
 {
-    qDebug() << text;
+    qDebug() << ("StarterWindow: " + text);
 }
 
 QEvent::Type StarterWindow::fileListDataLoadedEventType()
@@ -67,14 +81,21 @@ QEvent::Type StarterWindow::fileListDataLoadedEventType()
     return (QEvent::Type)(QEvent::User + 1);
 }
 
+void StarterWindow::receiveFileList(std::shared_ptr<FileListData> fileListData)
+{
+    WriteLog("Now receiving file list...");
+    fileListViewModel = new FileListViewModel();
+    fileListViewModel->setFileListData(fileListData);
+    sortFilterProxyModel = new QSortFilterProxyModel();
+    sortFilterProxyModel->setSourceModel(fileListViewModel);
+    sortFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    fileListView->setModel(sortFilterProxyModel);
+    fileListView->setColumnWidth(0, 300);
+}
+
 void StarterWindow::unloadFileList()
 {
 	fileListView->setModel(nullptr);
-	if (fileListData != nullptr)
-	{
-		delete fileListData;
-		fileListData = nullptr;
-	}
 	if (sortFilterProxyModel != nullptr)
 	{
 		delete sortFilterProxyModel;

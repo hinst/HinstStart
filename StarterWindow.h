@@ -15,6 +15,7 @@
 #include "FileListData.h"
 #include "FileListViewModel.h"
 #include "CommonUI.h"
+#include "FileListDataLoader.h"
 
 class StarterWindow : public QMainWindow
 {
@@ -30,7 +31,6 @@ public slots:
 protected:
     bool event(QEvent *event) override;
 private:
-	FileListData *fileListData;
 	QTableView* fileListView;
 	FileListViewModel* fileListViewModel;
 	QSortFilterProxyModel *sortFilterProxyModel;
@@ -38,7 +38,8 @@ private:
 	QVBoxLayout* rootLayout;
 	QLineEdit* searchLineEdit;
 	void WriteLog(QString text);
-    QEvent::Type fileListDataLoadedEventType();
+    static QEvent::Type fileListDataLoadedEventType();
+    void receiveFileList(std::shared_ptr<FileListData> fileListData);
 };
 
 #endif // STARTERWINDOW_H

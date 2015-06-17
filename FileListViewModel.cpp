@@ -64,7 +64,7 @@ QVariant FileListViewModel::headerData(int section, Qt::Orientation orientation,
 	return result;
 }
 
-void FileListViewModel::setFileListData(FileListData *fileListData)
+void FileListViewModel::setFileListData(std::shared_ptr<FileListData> fileListData)
 {
 	this->fileListData = fileListData;
 }
