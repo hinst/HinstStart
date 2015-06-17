@@ -4,11 +4,9 @@
 #
 #-------------------------------------------------
 
-QT += core gui winextras
+QT += core gui widgets winextras
 CONFIG += console
 CONFIG += c++11
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = HinstStart
 TEMPLATE = app
