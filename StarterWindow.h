@@ -11,6 +11,7 @@
 #include <QSortFilterProxyModel>
 #include <QHeaderView>
 #include <QTableWidgetItem>
+#include <QEvent>
 #include "FileListData.h"
 #include "FileListViewModel.h"
 #include "CommonUI.h"
@@ -26,6 +27,8 @@ public:
 	void unloadFileList();
 public slots:
 	void receiveSearchLineEditTextChanged(const QString &text);
+protected:
+    bool event(QEvent *event) override;
 private:
 	FileListData *fileListData;
 	QTableView* fileListView;
@@ -35,6 +38,7 @@ private:
 	QVBoxLayout* rootLayout;
 	QLineEdit* searchLineEdit;
 	void WriteLog(QString text);
+    QEvent::Type fileListDataLoadedEventType();
 };
 
 #endif // STARTERWINDOW_H

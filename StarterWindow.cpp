@@ -33,12 +33,18 @@ void StarterWindow::receiveSearchLineEditTextChanged(const QString& text)
 	if (sortFilterProxyModel != nullptr)
 	{
 		sortFilterProxyModel->setFilterFixedString(text);
-	}
+    }
+}
+
+bool StarterWindow::event(QEvent *event)
+{
+    if (event->type() == )
 }
 
 void StarterWindow::loadFileList()
 {
 	unloadFileList();
+    /*
 	fileListData = new FileListData();
 	fileListViewModel = new FileListViewModel();
 	fileListViewModel->setFileListData(fileListData);
@@ -47,11 +53,18 @@ void StarterWindow::loadFileList()
 	sortFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 	fileListView->setModel(sortFilterProxyModel);
 	fileListView->setColumnWidth(0, 300);
+    */
+    QThread *loaderThread = new
 }
 
 void StarterWindow::WriteLog(QString text)
 {
-	qDebug() << text;
+    qDebug() << text;
+}
+
+QEvent::Type StarterWindow::fileListDataLoadedEventType()
+{
+    return (QEvent::Type)(QEvent::User + 1);
 }
 
 void StarterWindow::unloadFileList()
