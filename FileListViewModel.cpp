@@ -38,7 +38,10 @@ QVariant FileListViewModel::data(const QModelIndex &index, int role) const
 			}
 			else if (role == Qt::DecorationRole)
 			{
-				result = fileListData->icons[rowIndex];
+				if (fileListData->icons.count() > 0)
+				{
+					result = fileListData->icons[rowIndex];
+				}
 			}
 		}
 	}

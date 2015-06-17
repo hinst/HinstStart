@@ -24,8 +24,8 @@ public:
     QString userStartMenuPath;
     QString commonStartMenuPath;
 	QList<QIcon> icons;
-private:
 	void load();
+private:
 	void setPaths();
 	void loadFiles(QString directoryPath);
 	void loadFile(QFileInfo fileInfo);

@@ -2,20 +2,18 @@
 
 FileListData::FileListData()
 {
-	load();
+	setPaths();
 }
 
 void FileListData::setPaths()
 {
     this->userStartMenuPath = QDir::homePath() + "/" + UserStartMenuSubPath;
-	WriteLog("userStartMenuPath = '" + userStartMenuPath + "'");
     this->commonStartMenuPath = CommonStartMenuPath;
 }
 
 void FileListData::load()
 {
 	this->files.clear();
-    this->setPaths();
 	this->loadFiles(this->userStartMenuPath);
 	this->loadIcons();
 }
