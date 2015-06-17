@@ -81,8 +81,10 @@ void FileListData::loadIcons()
 		auto fileInfo = files[i];
 		if (fileInfo.isSymLink())
 			fileInfo = QFileInfo(fileInfo.symLinkTarget());
-		const auto icon = loadIcon(fileInfo.absoluteFilePath());
+        /*
+        const auto icon = loadIcon(fileInfo.absoluteFilePath());
 		icons.append(icon);
+        */
 	}
 	delete fileIconProvider;
 }

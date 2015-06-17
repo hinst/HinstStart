@@ -28,6 +28,11 @@ void FileListDataLoader::load()
 {
 	std::shared_ptr<FileListData> fileListData(new FileListData());
 	fileListData->load();
-	this->fileListData = fileListData;
+    if (objectToNotifyWhenLoaded != nullptr)
+    {
+        auto loadedEvent = new LoadedEvent();
+        loadedEvent->fileListData = fileListData;
+        QCoreApplication::postEvent(objectToNotifyWhenLoaded, loadedEvent);
+    }
 }
 
