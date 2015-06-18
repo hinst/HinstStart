@@ -12,6 +12,8 @@
 #include <QTableWidgetItem>
 #include <QEvent>
 #include <QLabel>
+#include <QProgressBar>
+#include <QFrame>
 #include "FileListData.h"
 #include "FileListViewModel.h"
 #include "CommonUI.h"
@@ -38,8 +40,9 @@ private:
 	QWidget *rootWidget;
 	QVBoxLayout *rootLayout;
 	QHBoxLayout *progressLayout;
-	QWidget *progressWidget;
+	QFrame *progressWidget;
 	QLabel *progressLabel;
+	QProgressBar *progressBar;
 	QLineEdit* searchLineEdit;
 	void WriteLog(QString text);
     static QEvent::Type fileListDataLoadedEventType();
