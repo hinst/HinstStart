@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include <QWidget>
 #include <QTableView>
-#include <QDebug>
 #include <QLayout>
 #include <QLineEdit>
 #include <QThread>
@@ -12,10 +11,12 @@
 #include <QHeaderView>
 #include <QTableWidgetItem>
 #include <QEvent>
+#include <QLabel>
 #include "FileListData.h"
 #include "FileListViewModel.h"
 #include "CommonUI.h"
 #include "FileListDataLoader.h"
+#include "CommonLog.h"
 
 class StarterWindow : public QMainWindow
 {
@@ -31,11 +32,14 @@ public slots:
 protected:
     bool event(QEvent *event) override;
 private:
-	QTableView* fileListView;
-	FileListViewModel* fileListViewModel;
+	QTableView *fileListView;
+	FileListViewModel *fileListViewModel;
 	QSortFilterProxyModel *sortFilterProxyModel;
 	QWidget *rootWidget;
-	QVBoxLayout* rootLayout;
+	QVBoxLayout *rootLayout;
+	QHBoxLayout *progressLayout;
+	QWidget *progressWidget;
+	QLabel *progressLabel;
 	QLineEdit* searchLineEdit;
 	void WriteLog(QString text);
     static QEvent::Type fileListDataLoadedEventType();

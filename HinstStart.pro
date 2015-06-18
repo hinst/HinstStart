@@ -16,10 +16,12 @@ SOURCES += main.cpp\
     FileListViewModel.cpp \
     FileListData.cpp \
     CommonUI.cpp \
-    FileListDataLoader.cpp
+    FileListDataLoader.cpp \
+    CommonLog.cpp
 
 HEADERS  += StarterWindow.h \
     FileListViewModel.h \
     FileListData.h \
     CommonUI.h \
-    FileListDataLoader.h
+    FileListDataLoader.h \
+    CommonLog.h

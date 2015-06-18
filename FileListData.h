@@ -1,6 +1,8 @@
 #ifndef DATACONTAINER_H
 #define DATACONTAINER_H
 
+#include <memory>
+#include <functional>
 #include <QDir>
 #include <QList>
 #include <QString>
@@ -9,7 +11,6 @@
 #include <QFileIconProvider>
 #include <QSharedPointer>
 #include <QThread>
-#include <memory>
 #include <windows.h>
 #include <QtWinExtras/QtWin>
 
@@ -25,6 +26,8 @@ public:
     QString commonStartMenuPath;
 	QList<QIcon> icons;
 	void load();
+	// Progress reporting
+	std::function<void(int countOfFiles)> fileAddedEventReceiver;
 private:
 	void setPaths();
 	void loadFiles(QString directoryPath);

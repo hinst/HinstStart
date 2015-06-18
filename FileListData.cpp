@@ -44,12 +44,14 @@ void FileListData::loadFile(QFileInfo fileInfo)
 	else
 	{
 		this->files.append(fileInfo);
+		if (this->fileAddedEventReceiver != nullptr)
+			this->fileAddedEventReceiver(files.count());
 	}
 }
 
 void FileListData::WriteLog(QString text)
 {
-	qDebug() << (QString("DataContainer") + text);
+	qDebug() << (QString("FileListData") + text);
 }
 
 QIcon FileListData::loadIcon(QString filePath)

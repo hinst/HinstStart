@@ -3,13 +3,20 @@
 StarterWindow::StarterWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-	rootWidget = new QWidget;
+	rootWidget = new QWidget(this);
 	setCentralWidget(rootWidget);
-	rootLayout = new QVBoxLayout();
-	searchLineEdit = new QLineEdit();
+	rootLayout = new QVBoxLayout(rootWidget);
+	searchLineEdit = new QLineEdit(this);
 	searchLineEdit->setFont(CommonUI::globalObject.fixedFont());
 	rootLayout->addWidget(searchLineEdit);
-	fileListView = new QTableView();
+	progressWidget = new QWidget(this);
+	progressLayout = new QHBoxLayout(progressWidget);
+	progressLabel = new QLabel(this);
+	progressLabel->setText("Now loading...");
+	progressLabel->setFont(CommonUI::globalObject.fixedFont());
+	progressLayout->addWidget(progressLabel);
+	rootLayout->addWidget(progressWidget);
+	fileListView = new QTableView(this);
 	fileListView->setIconSize(QSize(32, 32));
 	fileListView->setFont(CommonUI::globalObject.fixedFont());
 	fileListView->verticalHeader()->setVisible(false);
@@ -18,7 +25,6 @@ StarterWindow::StarterWindow(QWidget *parent)
 	fileListViewModel = nullptr;
 	sortFilterProxyModel = nullptr;
 	rootLayout->addWidget(fileListView);
-	rootWidget->setLayout(rootLayout);
 	QObject::connect(searchLineEdit, SIGNAL(textChanged(QString)), this, SLOT(receiveSearchLineEditTextChanged(QString)));
 }
 
@@ -40,10 +46,18 @@ bool StarterWindow::event(QEvent *event)
     auto result = false;
     if (event->type() == fileListDataLoadedEventType())
     {
-        auto loadedEvent = (FileListDataLoader::LoadedEvent*)event;
-        receiveFileList(loadedEvent->fileListData);
-        delete loadedEvent->thread;
-        result = true;
+		auto loadedEvent = (FileListDataLoader::ProgressEvent*)event;
+		if (loadedEvent->subType == FileListDataLoader::ProgressEvent::Finished)
+		{
+			receiveFileList(loadedEvent->fileListData);
+			loadedEvent->thread->wait();
+			delete loadedEvent->thread;
+			result = true;
+		}
+		else if (loadedEvent->subType == FileListDataLoader::ProgressEvent::FileAdded)
+		{
+			progressLabel->setText("Loading files: " + QString::number(loadedEvent->fileListData->files.count()) + "...");
+		}
     }
     else
     {
@@ -55,7 +69,7 @@ bool StarterWindow::event(QEvent *event)
 void StarterWindow::loadFileList()
 {
 	unloadFileList();
-    /*
+	/*
 	fileListData = new FileListData();
 	fileListViewModel = new FileListViewModel();
 	fileListViewModel->setFileListData(fileListData);
@@ -73,7 +87,7 @@ void StarterWindow::loadFileList()
 
 void StarterWindow::WriteLog(QString text)
 {
-    qDebug() << ("StarterWindow: " + text);
+	CommonLog::Write(text);
 }
 
 QEvent::Type StarterWindow::fileListDataLoadedEventType()
@@ -83,8 +97,9 @@ QEvent::Type StarterWindow::fileListDataLoadedEventType()
 
 void StarterWindow::receiveFileList(std::shared_ptr<FileListData> fileListData)
 {
-    WriteLog("Now receiving file list...");
-    fileListViewModel = new FileListViewModel();
+	WriteLog("Now receiving file list...");
+	unloadFileList();
+	fileListViewModel = new FileListViewModel();
     fileListViewModel->setFileListData(fileListData);
     sortFilterProxyModel = new QSortFilterProxyModel();
     sortFilterProxyModel->setSourceModel(fileListViewModel);

@@ -17,12 +17,18 @@ public:
     QObject* objectToNotifyWhenLoaded;
     // Send this event type when loading is compledted;
     QEvent::Type eventTypeToNotifyWhenLoaded;
-    class LoadedEvent : public QEvent
+	class ProgressEvent : public QEvent
     {
     public:
-        LoadedEvent(QEvent::Type eventType);
+		enum SubType
+		{
+			FileAdded,
+			Finished
+		};
+		ProgressEvent(QEvent::Type eventType);
         std::shared_ptr<FileListData> fileListData;
-        QThread* thread;
+		SubType subType;
+		QThread* thread;
     };
 };
 
