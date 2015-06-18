@@ -23,11 +23,13 @@ public:
 		enum SubType
 		{
 			FileAdded,
+			IconLoaded,
 			Finished
 		};
 		ProgressEvent(QEvent::Type eventType);
         std::shared_ptr<FileListData> fileListData;
 		SubType subType;
+		int count;
 		QThread* thread;
     };
 };

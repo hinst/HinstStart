@@ -18,6 +18,7 @@ StarterWindow::StarterWindow(QWidget *parent)
 	progressLayout->addWidget(progressLabel, 1);
 	progressBar = new QProgressBar(this);
 	progressBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+	progressBar->setTextVisible(false);
 	progressLayout->addWidget(progressBar, 1);
 	progressWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 	rootLayout->addWidget(progressWidget);
@@ -61,7 +62,21 @@ bool StarterWindow::event(QEvent *event)
 		}
 		else if (loadedEvent->subType == FileListDataLoader::ProgressEvent::FileAdded)
 		{
-			progressLabel->setText("Loading files: " + QString::number(loadedEvent->fileListData->files.count()) + "...");
+			progressLabel->setText("Loading files: " + QString::number(loadedEvent->count) + "...");
+			result = true;
+		}
+		else if (loadedEvent->subType == FileListDataLoader::ProgressEvent::IconLoaded)
+		{
+			auto fileCount = loadedEvent->fileListData->files.count();
+			auto iconCount = loadedEvent->count;
+			progressLabel->setText("Loading icons: " + QString::number(iconCount) + " of " + QString::number(fileCount) + "...");
+			if (progressBar->maximum() != fileCount)
+			{
+				progressBar->setMaximum(fileCount);
+			}
+			progressBar->setValue(loadedEvent->count);
+			loadedEvent->fileListData->burnIcon(iconCount - 1);
+			result = true;
 		}
     }
     else
@@ -111,6 +126,8 @@ void StarterWindow::receiveFileList(std::shared_ptr<FileListData> fileListData)
     sortFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     fileListView->setModel(sortFilterProxyModel);
     fileListView->setColumnWidth(0, 300);
+	progressWidget->setVisible(false);
+	sortFilterProxyModel->setFilterFixedString(searchLineEdit->text());
 }
 
 void StarterWindow::unloadFileList()

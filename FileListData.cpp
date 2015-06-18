@@ -2,6 +2,7 @@
 
 FileListData::FileListData()
 {
+	hicons = nullptr;
 	setPaths();
 }
 
@@ -15,7 +16,12 @@ void FileListData::load()
 {
 	this->files.clear();
 	this->loadFiles(this->userStartMenuPath);
-	this->loadIcons();
+	this->loadHIcons();
+}
+
+FileListData::~FileListData()
+{
+	releaseHIcons();
 }
 
 void FileListData::loadFiles(QString directoryPath)
@@ -51,43 +57,56 @@ void FileListData::loadFile(QFileInfo fileInfo)
 
 void FileListData::WriteLog(QString text)
 {
-	qDebug() << (QString("FileListData") + text);
+	CommonLog::Write(QString("FileListData") + text);
 }
 
-QIcon FileListData::loadIcon(QString filePath)
+HICON FileListData::loadHIcon(QString filePath)
 {
-	QIcon result;
+	HICON result = 0;
 	auto filePathWideChars = new wchar_t[filePath.length() + 1];
 	filePath = filePath.replace('/', '\\');
 	filePath.toWCharArray(filePathWideChars);
 	filePathWideChars[filePath.length()] = 0;
 	auto fileInfo = new SHFILEINFO();
-	this->WriteLog("Now loading icon for file " + filePath);
 	if (SHGetFileInfoW(filePathWideChars, FILE_ATTRIBUTE_NORMAL, fileInfo, sizeof(SHFILEINFO), SHGFI_ICON | SHGFI_LARGEICON))
 	{
-		result = QIcon(QtWin::fromHICON(fileInfo->hIcon));
-		this->WriteLog("Icon loaded");
+		result = fileInfo->hIcon;
 	}
 	delete[] filePathWideChars;
-	DestroyIcon(fileInfo->hIcon);
 	delete fileInfo;
 	return result;
 }
 
-void FileListData::loadIcons()
+void FileListData::burnIcon(int index)
 {
-	auto fileIconProvider = new QFileIconProvider();
-	icons.clear();
+	auto hicon = hicons[index];
+	QIcon icon = QIcon(QtWin::fromHICON(hicon));
+	icons.append(icon);
+}
+
+void FileListData::loadHIcons()
+{
+	hicons = new HICON[files.count()];
 	for (int i = 0; i < files.count(); i++)
 	{
 		auto fileInfo = files[i];
 		if (fileInfo.isSymLink())
 			fileInfo = QFileInfo(fileInfo.symLinkTarget());
-        /*
-        const auto icon = loadIcon(fileInfo.absoluteFilePath());
-		icons.append(icon);
-        */
+		const auto icon = loadHIcon(fileInfo.absoluteFilePath());
+		hicons[i] = icon;
+		if (iconLoadedEventReceiver != nullptr)
+			iconLoadedEventReceiver(i + 1);
 	}
-	delete fileIconProvider;
+}
+
+void FileListData::releaseHIcons()
+{
+	if (hicons != nullptr)
+	{
+		for (int i = 0; i < files.count(); i++)
+			DestroyIcon(hicons[i]);
+		delete[] hicons;
+		hicons = nullptr;
+	}
 }
 

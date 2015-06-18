@@ -6,11 +6,20 @@ void FileListDataLoader::run()
     QElapsedTimer timer;
     timer.start();
 	fileListData->fileAddedEventReceiver =
-		[this, fileListData](int n)
+		[this, fileListData](int countOfFiles)
 		{
 			auto fileAddedEvent = new ProgressEvent(this->eventTypeToNotifyWhenLoaded);
 			fileAddedEvent->subType = ProgressEvent::FileAdded;
+			fileAddedEvent->count = countOfFiles;
+			QCoreApplication::postEvent(this->objectToNotifyWhenLoaded, fileAddedEvent);
+		};
+	fileListData->iconLoadedEventReceiver =
+		[this, fileListData](int countOfIcons)
+		{
+			auto fileAddedEvent = new ProgressEvent(this->eventTypeToNotifyWhenLoaded);
+			fileAddedEvent->subType = ProgressEvent::IconLoaded;
 			fileAddedEvent->fileListData = fileListData;
+			fileAddedEvent->count = countOfIcons;
 			QCoreApplication::postEvent(this->objectToNotifyWhenLoaded, fileAddedEvent);
 		};
 	fileListData->load();

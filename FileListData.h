@@ -13,6 +13,7 @@
 #include <QThread>
 #include <windows.h>
 #include <QtWinExtras/QtWin>
+#include "CommonLog.h"
 
 const QString UserStartMenuSubPath("AppData/Roaming/Microsoft/Windows/Start Menu");
 const QString CommonStartMenuPath("C:/ProgramData/Microsoft/Windows/Start Menu");
@@ -28,13 +29,18 @@ public:
 	void load();
 	// Progress reporting
 	std::function<void(int countOfFiles)> fileAddedEventReceiver;
+	std::function<void(int countOfIcons)> iconLoadedEventReceiver;
+	~FileListData();
+	void burnIcon(int index);
 private:
+	HICON *hicons;
 	void setPaths();
 	void loadFiles(QString directoryPath);
 	void loadFile(QFileInfo fileInfo);
 	void WriteLog(QString text);
-	QIcon loadIcon(QString filePath);
-	void loadIcons();
+	HICON loadHIcon(QString filePath);
+	void loadHIcons();
+	void releaseHIcons();
 };
 
 #endif // DATACONTAINER_H
