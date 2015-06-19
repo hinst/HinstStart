@@ -17,11 +17,13 @@ SOURCES += main.cpp\
     FileListData.cpp \
     CommonUI.cpp \
     FileListDataLoader.cpp \
-    CommonLog.cpp
+    CommonLog.cpp \
+    ImprovedSortFilterProxyModel.cpp
 
 HEADERS  += StarterWindow.h \
     FileListViewModel.h \
     FileListData.h \
     CommonUI.h \
     FileListDataLoader.h \
-    CommonLog.h
+    CommonLog.h \
+    ImprovedSortFilterProxyModel.h

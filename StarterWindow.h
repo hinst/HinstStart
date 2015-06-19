@@ -19,16 +19,17 @@
 #include "CommonUI.h"
 #include "FileListDataLoader.h"
 #include "CommonLog.h"
+#include "ImprovedSortFilterProxyModel.h"
 
 class StarterWindow : public QMainWindow
 {
     Q_OBJECT
 public:
     StarterWindow(QWidget *parent = 0);
-    ~StarterWindow();
 	void loadFileList();
-	/** Clears model of fileListView; deletes fileListViewModel, sortFilterProxyModel. */
+	// Clears model of fileListView; deletes fileListViewModel, sortFilterProxyModel
 	void unloadFileList();
+	~StarterWindow();
 public slots:
 	void receiveSearchLineEditTextChanged(const QString &text);
 protected:
@@ -36,7 +37,7 @@ protected:
 private:
 	QTableView *fileListView;
 	FileListViewModel *fileListViewModel;
-	QSortFilterProxyModel *sortFilterProxyModel;
+	ImprovedSortFilterProxyModel *sortFilterProxyModel;
 	QWidget *rootWidget;
 	QVBoxLayout *rootLayout;
 	QHBoxLayout *progressLayout;

@@ -89,16 +89,6 @@ bool StarterWindow::event(QEvent *event)
 void StarterWindow::loadFileList()
 {
 	unloadFileList();
-	/*
-	fileListData = new FileListData();
-	fileListViewModel = new FileListViewModel();
-	fileListViewModel->setFileListData(fileListData);
-	sortFilterProxyModel = new QSortFilterProxyModel();
-	sortFilterProxyModel->setSourceModel(fileListViewModel);
-	sortFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-	fileListView->setModel(sortFilterProxyModel);
-	fileListView->setColumnWidth(0, 300);
-    */
     auto *loaderThread = new FileListDataLoader();
     loaderThread->objectToNotifyWhenLoaded = this;
     loaderThread->eventTypeToNotifyWhenLoaded = fileListDataLoadedEventType();
@@ -121,7 +111,7 @@ void StarterWindow::receiveFileList(std::shared_ptr<FileListData> fileListData)
 	unloadFileList();
 	fileListViewModel = new FileListViewModel();
     fileListViewModel->setFileListData(fileListData);
-    sortFilterProxyModel = new QSortFilterProxyModel();
+	sortFilterProxyModel = new ImprovedSortFilterProxyModel();
     sortFilterProxyModel->setSourceModel(fileListViewModel);
     sortFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     fileListView->setModel(sortFilterProxyModel);
