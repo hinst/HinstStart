@@ -12,6 +12,7 @@ void ImprovedSortFilterProxyModel::setFilterFixedString(const QString &pattern)
 
 bool ImprovedSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
+	CommonLog::Write("lt");
 //	auto result = false;
 //	QVariant leftData = sourceModel()->data(left);
 //	QVariant rightData = sourceModel()->data(right);
