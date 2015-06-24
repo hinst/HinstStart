@@ -117,6 +117,7 @@ void StarterWindow::receiveFileList(std::shared_ptr<FileListData> fileListData)
     sortFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     fileListView->setModel(sortFilterProxyModel);
     fileListView->setColumnWidth(0, 300);
+	fileListView->setColumnWidth(1, 700);
 	fileListView->sortByColumn(0, Qt::AscendingOrder);
 	progressWidget->setVisible(false);
 	sortFilterProxyModel->setFilterFixedString(searchLineEdit->text());

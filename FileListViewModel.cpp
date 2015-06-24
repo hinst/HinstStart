@@ -20,7 +20,7 @@ int FileListViewModel::rowCount(const QModelIndex &parent) const
 
 int FileListViewModel::columnCount(const QModelIndex &parent) const
 {
-	return 1;
+	return 2;
 }
 
 QVariant FileListViewModel::data(const QModelIndex &index, int role) const
@@ -41,6 +41,20 @@ QVariant FileListViewModel::data(const QModelIndex &index, int role) const
 				if (fileListData->icons.count() > 0)
 				{
 					result = fileListData->icons[rowIndex];
+				}
+			}
+		}
+		if (columnIndex == 1)
+		{
+			if (role == Qt::DisplayRole)
+			{
+				if (fileListData->files[rowIndex].isSymLink())
+				{
+					result = fileListData->files[rowIndex].symLinkTarget();
+				}
+				else
+				{
+					result = fileListData->files[rowIndex].absoluteDir().path();
 				}
 			}
 		}

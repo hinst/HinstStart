@@ -8,8 +8,7 @@ void ImprovedSortFilterProxyModel::setFilterFixedString(const QString &pattern)
 {
 	this->QSortFilterProxyModel::setFilterFixedString(pattern);
 	this->currentFilterFixedString = pattern;
-	auto model = this->sourceModel();
-	this->setSourceModel(model);
+	this->setSourceModel(this->sourceModel());
 }
 
 bool ImprovedSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
