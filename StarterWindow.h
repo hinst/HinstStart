@@ -22,6 +22,7 @@
 #include "FileListDataLoader.h"
 #include "CommonLog.h"
 #include "ImprovedSortFilterProxyModel.h"
+#include "FileListView.h"
 
 class StarterWindow : public QMainWindow
 {

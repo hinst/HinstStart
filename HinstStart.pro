@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     CommonUI.cpp \
     FileListDataLoader.cpp \
     CommonLog.cpp \
-    ImprovedSortFilterProxyModel.cpp
+    ImprovedSortFilterProxyModel.cpp \
+    FileListView.cpp
 
 HEADERS  += StarterWindow.h \
     FileListViewModel.h \
@@ -26,4 +27,5 @@ HEADERS  += StarterWindow.h \
     CommonUI.h \
     FileListDataLoader.h \
     CommonLog.h \
-    ImprovedSortFilterProxyModel.h
+    ImprovedSortFilterProxyModel.h \
+    FileListView.h
