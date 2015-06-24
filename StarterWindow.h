@@ -14,6 +14,8 @@
 #include <QLabel>
 #include <QProgressBar>
 #include <QFrame>
+#include <QDesktopServices>
+#include <QUrl>
 #include "FileListData.h"
 #include "FileListViewModel.h"
 #include "CommonUI.h"
@@ -32,12 +34,15 @@ public:
 	~StarterWindow();
 public slots:
 	void receiveSearchLineEditTextChanged(const QString &text);
+	void receiveFileListViewDoubleClicked(const QModelIndex& modelIndex);
+	void startFile(const QModelIndex& modelIndex);
 protected:
     bool event(QEvent *event) override;
 private:
 	QTableView *fileListView;
 	FileListViewModel *fileListViewModel;
 	ImprovedSortFilterProxyModel *sortFilterProxyModel;
+	std::shared_ptr<FileListData> fileListData;
 	QWidget *rootWidget;
 	QVBoxLayout *rootLayout;
 	QHBoxLayout *progressLayout;
@@ -45,7 +50,7 @@ private:
 	QLabel *progressLabel;
 	QProgressBar *progressBar;
 	QLineEdit* searchLineEdit;
-	void WriteLog(QString text);
+	void writeLog(QString text);
     static QEvent::Type fileListDataLoadedEventType();
     void receiveFileList(std::shared_ptr<FileListData> fileListData);
 };

@@ -44,7 +44,22 @@ void StarterWindow::receiveSearchLineEditTextChanged(const QString& text)
 	if (sortFilterProxyModel != nullptr)
 	{
 		sortFilterProxyModel->setFilterFixedString(text);
-    }
+	}
+}
+
+void StarterWindow::receiveFileListViewDoubleClicked(const QModelIndex &modelIndex)
+{
+	startFile(modelIndex);
+}
+
+void StarterWindow::startFile(const QModelIndex &modelIndex)
+{
+	auto actualModelIndex = sortFilterProxyModel->mapToSource(modelIndex);
+	auto rowIndex = actualModelIndex.row();
+	auto file = fileListData->files[rowIndex];
+	auto filePath = QString("file:///") + file.filePath();
+	auto fileUrl = QUrl(filePath);
+	QDesktopServices::openUrl(fileUrl);
 }
 
 bool StarterWindow::event(QEvent *event)
@@ -95,7 +110,7 @@ void StarterWindow::loadFileList()
     loaderThread->start();
 }
 
-void StarterWindow::WriteLog(QString text)
+void StarterWindow::writeLog(QString text)
 {
 	CommonLog::Write(text);
 }
@@ -107,7 +122,7 @@ QEvent::Type StarterWindow::fileListDataLoadedEventType()
 
 void StarterWindow::receiveFileList(std::shared_ptr<FileListData> fileListData)
 {
-	WriteLog("Now receiving file list...");
+	writeLog("Now receiving file list...");
 	unloadFileList();
 	fileListViewModel = new FileListViewModel();
     fileListViewModel->setFileListData(fileListData);
@@ -119,8 +134,10 @@ void StarterWindow::receiveFileList(std::shared_ptr<FileListData> fileListData)
     fileListView->setColumnWidth(0, 300);
 	fileListView->setColumnWidth(1, 700);
 	fileListView->sortByColumn(0, Qt::AscendingOrder);
+	QObject::connect(fileListView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(receiveFileListViewDoubleClicked(QModelIndex)));
 	progressWidget->setVisible(false);
 	sortFilterProxyModel->setFilterFixedString(searchLineEdit->text());
+	this->fileListData = fileListData;
 }
 
 void StarterWindow::unloadFileList()
