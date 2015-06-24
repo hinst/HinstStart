@@ -130,14 +130,19 @@ void StarterWindow::receiveFileList(std::shared_ptr<FileListData> fileListData)
     sortFilterProxyModel->setSourceModel(fileListViewModel);
 	sortFilterProxyModel->setFilterKeyColumn(0);
     sortFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-    fileListView->setModel(sortFilterProxyModel);
-    fileListView->setColumnWidth(0, 300);
-	fileListView->setColumnWidth(1, 700);
-	fileListView->sortByColumn(0, Qt::AscendingOrder);
-	QObject::connect(fileListView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(receiveFileListViewDoubleClicked(QModelIndex)));
+	prepareFileListView();
 	progressWidget->setVisible(false);
 	sortFilterProxyModel->setFilterFixedString(searchLineEdit->text());
 	this->fileListData = fileListData;
+}
+
+void StarterWindow::prepareFileListView()
+{
+	fileListView->setModel(sortFilterProxyModel);
+	fileListView->setColumnWidth(0, 300);
+	fileListView->setColumnWidth(1, 700);
+	fileListView->sortByColumn(0, Qt::AscendingOrder);
+	QObject::connect(fileListView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(receiveFileListViewDoubleClicked(QModelIndex)));
 }
 
 void StarterWindow::unloadFileList()

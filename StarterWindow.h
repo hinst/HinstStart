@@ -53,6 +53,7 @@ private:
 	void writeLog(QString text);
     static QEvent::Type fileListDataLoadedEventType();
     void receiveFileList(std::shared_ptr<FileListData> fileListData);
+	void prepareFileListView();
 };
 
 #endif // STARTERWINDOW_H
