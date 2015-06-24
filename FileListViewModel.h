@@ -17,6 +17,7 @@ public:
 private:
     std::shared_ptr<FileListData> fileListData;
 	void writeLog(QString text) const;
+	QString dataFilePath(const QModelIndex &index, int role = Qt::DisplayRole) const;
 };
 
 #endif // FILELISTVIEWMODEL_H

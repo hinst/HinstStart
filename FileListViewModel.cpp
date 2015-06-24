@@ -46,17 +46,7 @@ QVariant FileListViewModel::data(const QModelIndex &index, int role) const
 		}
 		if (columnIndex == 1)
 		{
-			if (role == Qt::DisplayRole)
-			{
-				if (fileListData->files[rowIndex].isSymLink())
-				{
-					result = fileListData->files[rowIndex].symLinkTarget();
-				}
-				else
-				{
-					result = fileListData->files[rowIndex].absoluteDir().path();
-				}
-			}
+			result = this->dataFilePath(index, role);
 		}
 	}
 	return result;
@@ -86,5 +76,24 @@ void FileListViewModel::setFileListData(std::shared_ptr<FileListData> fileListDa
 void FileListViewModel::writeLog(QString text) const
 {
 	qDebug() << text;
+}
+
+QString FileListViewModel::dataFilePath(const QModelIndex &index, int role) const
+{
+	QString filePath;
+	auto rowIndex = index.row();
+	if (role == Qt::DisplayRole)
+	{
+		if (fileListData->files[rowIndex].isSymLink())
+		{
+			filePath = fileListData->files[rowIndex].symLinkTarget();
+		}
+		else
+		{
+			filePath = fileListData->files[rowIndex].absoluteDir().path();
+		}
+	}
+	filePath = filePath.replace('/', '\\');
+	return filePath;
 }
 
