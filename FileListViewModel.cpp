@@ -64,6 +64,13 @@ QVariant FileListViewModel::headerData(int section, Qt::Orientation orientation,
 				result = "Name";
 			}
 		}
+		if (section == 1)
+		{
+			if (role == Qt::DisplayRole)
+			{
+				result = "Path";
+			}
+		}
 	}
 	return result;
 }
