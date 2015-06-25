@@ -40,7 +40,7 @@ public slots:
 protected:
     bool event(QEvent *event) override;
 private:
-	QTableView *fileListView;
+	FileListView *fileListView;
 	FileListViewModel *fileListViewModel;
 	ImprovedSortFilterProxyModel *sortFilterProxyModel;
 	std::shared_ptr<FileListData> fileListData;
@@ -53,8 +53,9 @@ private:
 	QLineEdit* searchLineEdit;
 	void writeLog(QString text);
     static QEvent::Type fileListDataLoadedEventType();
+	static QEvent::Type listEnterEventType();
     void receiveFileList(std::shared_ptr<FileListData> fileListData);
-	void prepareFileListView();
+	void loadFileListView();
 };
 
 #endif // STARTERWINDOW_H

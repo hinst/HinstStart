@@ -22,12 +22,15 @@ StarterWindow::StarterWindow(QWidget *parent)
 	progressLayout->addWidget(progressBar, 1);
 	progressWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 	rootLayout->addWidget(progressWidget);
-	fileListView = new QTableView(this);
+	fileListView = new FileListView(this);
 	fileListView->setIconSize(QSize(32, 32));
 	fileListView->setFont(CommonUI::globalObject.fixedFont());
 	fileListView->verticalHeader()->setVisible(false);
 	fileListView->verticalHeader()->resizeSections(QHeaderView::Fixed);
 	fileListView->verticalHeader()->setDefaultSectionSize(34);
+	QObject::connect(fileListView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(receiveFileListViewDoubleClicked(QModelIndex)));
+	fileListView->keyEventReceiver = this;
+	fileListView->keyEnterEventType = this->listEnterEventType();
 	fileListViewModel = nullptr;
 	sortFilterProxyModel = nullptr;
 	rootLayout->addWidget(fileListView);
@@ -54,12 +57,15 @@ void StarterWindow::receiveFileListViewDoubleClicked(const QModelIndex &modelInd
 
 void StarterWindow::startFile(const QModelIndex &modelIndex)
 {
-	auto actualModelIndex = sortFilterProxyModel->mapToSource(modelIndex);
-	auto rowIndex = actualModelIndex.row();
-	auto file = fileListData->files[rowIndex];
-	auto filePath = QString("file:///") + file.filePath();
-	auto fileUrl = QUrl(filePath);
-	QDesktopServices::openUrl(fileUrl);
+	if (sortFilterProxyModel != nullptr)
+	{
+		auto actualModelIndex = sortFilterProxyModel->mapToSource(modelIndex);
+		auto rowIndex = actualModelIndex.row();
+		auto file = fileListData->files[rowIndex];
+		auto filePath = QString("file:///") + file.filePath();
+		auto fileUrl = QUrl(filePath);
+		QDesktopServices::openUrl(fileUrl);
+	}
 }
 
 bool StarterWindow::event(QEvent *event)
@@ -94,6 +100,15 @@ bool StarterWindow::event(QEvent *event)
 			result = true;
 		}
     }
+	else if (event->type() == listEnterEventType())
+	{
+		auto selectedIndexes = fileListView->selectionModel()->selection().indexes();
+		for (int i = 0; i < selectedIndexes.count(); i++)
+		{
+			auto selectedIndex = selectedIndexes[i];
+			startFile(selectedIndex);
+		}
+	}
     else
     {
         result = this->QMainWindow::event(event);
@@ -117,7 +132,12 @@ void StarterWindow::writeLog(QString text)
 
 QEvent::Type StarterWindow::fileListDataLoadedEventType()
 {
-    return (QEvent::Type)(QEvent::User + 1);
+	return (QEvent::Type)(QEvent::User + 1);
+}
+
+QEvent::Type StarterWindow::listEnterEventType()
+{
+	return (QEvent::Type)(QEvent::User + 2);
 }
 
 void StarterWindow::receiveFileList(std::shared_ptr<FileListData> fileListData)
@@ -130,19 +150,18 @@ void StarterWindow::receiveFileList(std::shared_ptr<FileListData> fileListData)
     sortFilterProxyModel->setSourceModel(fileListViewModel);
 	sortFilterProxyModel->setFilterKeyColumn(0);
     sortFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-	prepareFileListView();
+	loadFileListView();
 	progressWidget->setVisible(false);
 	sortFilterProxyModel->setFilterFixedString(searchLineEdit->text());
 	this->fileListData = fileListData;
 }
 
-void StarterWindow::prepareFileListView()
+void StarterWindow::loadFileListView()
 {
 	fileListView->setModel(sortFilterProxyModel);
 	fileListView->setColumnWidth(0, 300);
 	fileListView->setColumnWidth(1, 700);
 	fileListView->sortByColumn(0, Qt::AscendingOrder);
-	QObject::connect(fileListView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(receiveFileListViewDoubleClicked(QModelIndex)));
 }
 
 void StarterWindow::unloadFileList()
