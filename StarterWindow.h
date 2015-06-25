@@ -52,7 +52,7 @@ private:
 	QProgressBar *progressBar;
 	QLineEdit* searchLineEdit;
 	void writeLog(QString text);
-    static QEvent::Type fileListDataLoadedEventType();
+	static QEvent::Type fileListLoadingProgressEventType();
 	static QEvent::Type listEnterEventType();
     void receiveFileList(std::shared_ptr<FileListData> fileListData);
 	void loadFileListView();

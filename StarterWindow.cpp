@@ -52,11 +52,13 @@ void StarterWindow::receiveSearchLineEditTextChanged(const QString& text)
 
 void StarterWindow::receiveFileListViewDoubleClicked(const QModelIndex &modelIndex)
 {
+	writeLog("doubleClicked");
 	startFile(modelIndex);
 }
 
 void StarterWindow::startFile(const QModelIndex &modelIndex)
 {
+	writeLog("start");
 	if (sortFilterProxyModel != nullptr)
 	{
 		auto actualModelIndex = sortFilterProxyModel->mapToSource(modelIndex);
@@ -71,32 +73,32 @@ void StarterWindow::startFile(const QModelIndex &modelIndex)
 bool StarterWindow::event(QEvent *event)
 {
     auto result = false;
-    if (event->type() == fileListDataLoadedEventType())
+	if (event->type() == fileListLoadingProgressEventType())
     {
-		auto loadedEvent = (FileListDataLoader::ProgressEvent*)event;
-		if (loadedEvent->subType == FileListDataLoader::ProgressEvent::Finished)
+		auto progressEvent = (FileListDataLoader::ProgressEvent*)event;
+		if (progressEvent->subType == FileListDataLoader::ProgressEvent::Finished)
 		{
-			receiveFileList(loadedEvent->fileListData);
-			loadedEvent->thread->wait();
-			delete loadedEvent->thread;
+			receiveFileList(progressEvent->fileListData);
+			progressEvent->thread->wait();
+			delete progressEvent->thread;
 			result = true;
 		}
-		else if (loadedEvent->subType == FileListDataLoader::ProgressEvent::FileAdded)
+		else if (progressEvent->subType == FileListDataLoader::ProgressEvent::FileAdded)
 		{
-			progressLabel->setText("Loading files: " + QString::number(loadedEvent->count) + "...");
+			progressLabel->setText("Loading files: " + QString::number(progressEvent->count) + "...");
 			result = true;
 		}
-		else if (loadedEvent->subType == FileListDataLoader::ProgressEvent::IconLoaded)
+		else if (progressEvent->subType == FileListDataLoader::ProgressEvent::IconLoaded)
 		{
-			auto fileCount = loadedEvent->fileListData->files.count();
-			auto iconCount = loadedEvent->count;
+			auto fileCount = progressEvent->fileListData->files.count();
+			auto iconCount = progressEvent->count;
 			progressLabel->setText("Loading icons: " + QString::number(iconCount) + " of " + QString::number(fileCount) + "...");
 			if (progressBar->maximum() != fileCount)
 			{
 				progressBar->setMaximum(fileCount);
 			}
-			progressBar->setValue(loadedEvent->count);
-			loadedEvent->fileListData->burnIcon(iconCount - 1);
+			progressBar->setValue(progressEvent->count);
+			progressEvent->fileListData->burnIcon(iconCount - 1);
 			result = true;
 		}
     }
@@ -107,6 +109,8 @@ bool StarterWindow::event(QEvent *event)
 		{
 			auto selectedIndex = selectedIndexes[i];
 			startFile(selectedIndex);
+			result = true;
+			break;
 		}
 	}
     else
@@ -121,16 +125,16 @@ void StarterWindow::loadFileList()
 	unloadFileList();
     auto *loaderThread = new FileListDataLoader();
     loaderThread->progressEventReceiver = this;
-    loaderThread->loadedEventType = fileListDataLoadedEventType();
+	loaderThread->loadedEventType = fileListLoadingProgressEventType();
     loaderThread->start();
 }
 
 void StarterWindow::writeLog(QString text)
 {
-	CommonLog::Write(text);
+	CommonLog::Write("StarterMenuWindow: " + text);
 }
 
-QEvent::Type StarterWindow::fileListDataLoadedEventType()
+QEvent::Type StarterWindow::fileListLoadingProgressEventType()
 {
 	return (QEvent::Type)(QEvent::User + 1);
 }
