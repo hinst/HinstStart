@@ -1,0 +1,1 @@
+D:\App\cloc-1.62.exe --exclude-dir=.git .
