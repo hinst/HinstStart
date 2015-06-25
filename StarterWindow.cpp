@@ -105,8 +105,8 @@ void StarterWindow::loadFileList()
 {
 	unloadFileList();
     auto *loaderThread = new FileListDataLoader();
-    loaderThread->objectToNotifyWhenLoaded = this;
-    loaderThread->eventTypeToNotifyWhenLoaded = fileListDataLoadedEventType();
+    loaderThread->progressEventReceiver = this;
+    loaderThread->loadedEventType = fileListDataLoadedEventType();
     loaderThread->start();
 }
 

@@ -8,29 +8,29 @@ void FileListDataLoader::run()
 	fileListData->fileAddedEventReceiver =
 		[this, fileListData](int countOfFiles)
 		{
-			auto fileAddedEvent = new ProgressEvent(this->eventTypeToNotifyWhenLoaded);
+			auto fileAddedEvent = new ProgressEvent(this->loadedEventType);
 			fileAddedEvent->subType = ProgressEvent::FileAdded;
 			fileAddedEvent->count = countOfFiles;
-			QCoreApplication::postEvent(this->objectToNotifyWhenLoaded, fileAddedEvent);
+			QCoreApplication::postEvent(this->progressEventReceiver, fileAddedEvent);
 		};
 	fileListData->iconLoadedEventReceiver =
 		[this, fileListData](int countOfIcons)
 		{
-			auto fileAddedEvent = new ProgressEvent(this->eventTypeToNotifyWhenLoaded);
+			auto fileAddedEvent = new ProgressEvent(this->loadedEventType);
 			fileAddedEvent->subType = ProgressEvent::IconLoaded;
 			fileAddedEvent->fileListData = fileListData;
 			fileAddedEvent->count = countOfIcons;
-			QCoreApplication::postEvent(this->objectToNotifyWhenLoaded, fileAddedEvent);
+			QCoreApplication::postEvent(this->progressEventReceiver, fileAddedEvent);
 		};
 	fileListData->load();
     qDebug() << timer.elapsed();
-    if (objectToNotifyWhenLoaded != nullptr)
+    if (progressEventReceiver != nullptr)
     {
-		auto loadedEvent = new ProgressEvent(this->eventTypeToNotifyWhenLoaded);
+		auto loadedEvent = new ProgressEvent(this->loadedEventType);
 		loadedEvent->subType = ProgressEvent::Finished;
 		loadedEvent->fileListData = fileListData;
         loadedEvent->thread = this;
-        QCoreApplication::postEvent(objectToNotifyWhenLoaded, loadedEvent);
+        QCoreApplication::postEvent(progressEventReceiver, loadedEvent);
     }
 }
 

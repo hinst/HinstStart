@@ -14,9 +14,9 @@ class FileListDataLoader : public QThread
 public:
     void run() override;
     // Objet to notify when loading is completed;
-    QObject* objectToNotifyWhenLoaded;
+	QObject* progressEventReceiver;
     // Send this event type when loading is compledted;
-    QEvent::Type eventTypeToNotifyWhenLoaded;
+	QEvent::Type loadedEventType;
 	class ProgressEvent : public QEvent
     {
     public:
