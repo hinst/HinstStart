@@ -80,13 +80,7 @@ bool StarterWindow::event(QEvent *event)
     }
 	else if (event->type() == listEnterEventType())
 	{
-		auto selectedIndexes = fileListView->selectionModel()->selection().indexes();
-		for (int i = 0; i < selectedIndexes.count(); i++)
-		{
-			auto selectedIndex = selectedIndexes[i];
-			startFile(selectedIndex);
-			break;
-		}
+		receiveListEnterEvent();
 		result = true;
 	}
     else
@@ -167,6 +161,17 @@ void StarterWindow::receiveFileListProgressEvent(FileListDataLoader::ProgressEve
 		}
 		progressBar->setValue(event->count);
 		event->fileListData->burnIcon(iconCount - 1);
+	}
+}
+
+void StarterWindow::receiveListEnterEvent()
+{
+	auto selectedIndexes = fileListView->selectionModel()->selection().indexes();
+	for (int i = 0; i < selectedIndexes.count(); i++)
+	{
+		auto selectedIndex = selectedIndexes[i];
+		startFile(selectedIndex);
+		break;
 	}
 }
 
