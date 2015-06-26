@@ -55,7 +55,7 @@ void FileListData::loadFile(QFileInfo fileInfo)
 	}
 }
 
-void FileListData::WriteLog(QString text)
+void FileListData::writeLog(QString text)
 {
 	CommonLog::write(QString("FileListData") + text);
 }
@@ -80,13 +80,27 @@ HICON FileListData::loadHIcon(QString filePath)
 	return result;
 }
 
+QIcon FileListData::loadIcon(QString filePath)
+{
+	QPixmapCache::clear();
+	QFileIconProvider provider;
+	auto icon = provider.icon(filePath);
+	return icon;
+}
+
 void FileListData::burnIcon(int index)
 {
 	auto hicon = hicons[index];
-//	if (files[index].suffix() == QString("url"))
-//		writeLog(files[index].fileName());
-	QIcon icon = QIcon(QtWin::fromHICON(hicon));
-	icons.append(icon);
+	if (files[index].suffix() == QString("url"))
+	{
+		auto icon = loadIcon(files[index].filePath());
+		icons.append(icon);
+	}
+	else
+	{
+		auto icon = QtWin::fromHICON(hicon);
+		icons.append(icon);
+	}
 }
 
 void FileListData::loadHIcons()
@@ -113,10 +127,5 @@ void FileListData::releaseHIcons()
 		delete[] hicons;
 		hicons = nullptr;
 	}
-}
-
-void FileListData::writeLog(QString text)
-{
-	CommonLog::write(text);
 }
 
