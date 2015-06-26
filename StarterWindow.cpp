@@ -75,43 +75,13 @@ bool StarterWindow::event(QEvent *event)
     auto result = false;
 	if (event->type() == fileListLoadingProgressEventType())
     {
-		auto progressEvent = (FileListDataLoader::ProgressEvent*)event;
-		if (progressEvent->subType == FileListDataLoader::ProgressEvent::Finished)
-		{
-			receiveFileList(progressEvent->fileListData);
-			progressEvent->thread->wait();
-			delete progressEvent->thread;
-			result = true;
-		}
-		else if (progressEvent->subType == FileListDataLoader::ProgressEvent::FileAdded)
-		{
-			progressLabel->setText("Loading files: " + QString::number(progressEvent->count) + "...");
-			result = true;
-		}
-		else if (progressEvent->subType == FileListDataLoader::ProgressEvent::IconLoaded)
-		{
-			auto fileCount = progressEvent->fileListData->files.count();
-			auto iconCount = progressEvent->count;
-			progressLabel->setText("Loading icons: " + QString::number(iconCount) + " of " + QString::number(fileCount) + "...");
-			if (progressBar->maximum() != fileCount)
-			{
-				progressBar->setMaximum(fileCount);
-			}
-			progressBar->setValue(progressEvent->count);
-			progressEvent->fileListData->burnIcon(iconCount - 1);
-			result = true;
-		}
+		receiveFileListProgressEvent((FileListDataLoader::ProgressEvent*)event);
+		result = true;
     }
 	else if (event->type() == listEnterEventType())
 	{
-		auto selectedIndexes = fileListView->selectionModel()->selection().indexes();
-		for (int i = 0; i < selectedIndexes.count(); i++)
-		{
-			auto selectedIndex = selectedIndexes[i];
-			startFile(selectedIndex);
-			result = true;
-			break;
-		}
+		receiveListEnterEvent();
+		result = true;
 	}
     else
     {
@@ -166,6 +136,43 @@ void StarterWindow::loadFileListView()
 	fileListView->setColumnWidth(0, 300);
 	fileListView->setColumnWidth(1, 700);
 	fileListView->sortByColumn(0, Qt::AscendingOrder);
+}
+
+void StarterWindow::receiveFileListProgressEvent(FileListDataLoader::ProgressEvent *event)
+{
+	if (event->subType == FileListDataLoader::ProgressEvent::Finished)
+	{
+		receiveFileList(event->fileListData);
+		event->thread->wait();
+		delete event->thread;
+	}
+	else if (event->subType == FileListDataLoader::ProgressEvent::FileAdded)
+	{
+		progressLabel->setText("Loading files: " + QString::number(event->count) + "...");
+	}
+	else if (event->subType == FileListDataLoader::ProgressEvent::IconLoaded)
+	{
+		auto fileCount = event->fileListData->files.count();
+		auto iconCount = event->count;
+		progressLabel->setText("Loading icons: " + QString::number(iconCount) + " of " + QString::number(fileCount) + "...");
+		if (progressBar->maximum() != fileCount)
+		{
+			progressBar->setMaximum(fileCount);
+		}
+		progressBar->setValue(event->count);
+		event->fileListData->burnIcon(iconCount - 1);
+	}
+}
+
+void StarterWindow::receiveListEnterEvent()
+{
+	auto selectedIndexes = fileListView->selectionModel()->selection().indexes();
+	for (int i = 0; i < selectedIndexes.count(); i++)
+	{
+		auto selectedIndex = selectedIndexes[i];
+		startFile(selectedIndex);
+		break;
+	}
 }
 
 void StarterWindow::unloadFileList()

@@ -56,6 +56,8 @@ private:
 	static QEvent::Type listEnterEventType();
     void receiveFileList(std::shared_ptr<FileListData> fileListData);
 	void loadFileListView();
+	void receiveFileListProgressEvent(FileListDataLoader::ProgressEvent *event);
+	void receiveListEnterEvent();
 };
 
 #endif // STARTERWINDOW_H
