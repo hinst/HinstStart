@@ -30,4 +30,4 @@ HEADERS  += StarterWindow.h \
     ImprovedSortFilterProxyModel.h \
     FileListView.h
 
-LIBS += libuuid libole32 liboleaut32
+LIBS += -luuid -lole32 -loleaut32 -lshell32 -lcomctl32
