@@ -6,7 +6,7 @@
 
 namespace CommonLog
 {
-	void Write(QString text);
+	void write(QString text);
 }
 
 #endif // COMMONLOG_H

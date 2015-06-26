@@ -41,6 +41,7 @@ private:
 	HICON loadHIcon(QString filePath);
 	void loadHIcons();
 	void releaseHIcons();
+	void writeLog(QString text);
 };
 
 #endif // DATACONTAINER_H

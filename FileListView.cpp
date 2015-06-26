@@ -26,6 +26,6 @@ void FileListView::keyPressEvent(QKeyEvent *event)
 
 void FileListView::writeLog(QString text)
 {
-	CommonLog::Write(QString("FileListView: ") + text);
+	CommonLog::write(QString("FileListView: ") + text);
 }
 

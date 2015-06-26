@@ -131,7 +131,7 @@ void StarterWindow::loadFileList()
 
 void StarterWindow::writeLog(QString text)
 {
-	CommonLog::Write("StarterMenuWindow: " + text);
+	CommonLog::write("StarterMenuWindow: " + text);
 }
 
 QEvent::Type StarterWindow::fileListLoadingProgressEventType()

@@ -1,6 +1,6 @@
 #include "CommonLog.h"
 
-void CommonLog::Write(QString text)
+void CommonLog::write(QString text)
 {
 	qDebug() << text;
 }
