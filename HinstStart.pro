@@ -29,3 +29,5 @@ HEADERS  += StarterWindow.h \
     CommonLog.h \
     ImprovedSortFilterProxyModel.h \
     FileListView.h
+
+LIBS += libuuid libole32 liboleaut32
