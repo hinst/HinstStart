@@ -80,7 +80,8 @@ HICON FileListData::loadHIcon(QString filePath)
 void FileListData::burnIcon(int index)
 {
 	auto hicon = hicons[index];
-	writeLog(files[index].completeSuffix());
+//	if (files[index].suffix() == QString("url"))
+//		writeLog(files[index].fileName());
 	QIcon icon = QIcon(QtWin::fromHICON(hicon));
 	icons.append(icon);
 }
@@ -91,8 +92,8 @@ void FileListData::loadHIcons()
 	for (int i = 0; i < files.count(); i++)
 	{
 		auto fileInfo = files[i];
-//		if (fileInfo.isSymLink())
-//			fileInfo = QFileInfo(fileInfo.symLinkTarget());
+		if (fileInfo.isSymLink())
+			fileInfo = QFileInfo(fileInfo.symLinkTarget());
 		const auto icon = loadHIcon(fileInfo.absoluteFilePath());
 		hicons[i] = icon;
 		if (iconLoadedEventReceiver != nullptr)
