@@ -13,6 +13,7 @@
 #include <QThread>
 #include <windows.h>
 #include <QtWinExtras/QtWin>
+#include <QPixmapCache>
 #include "CommonLog.h"
 
 const QString UserStartMenuSubPath("AppData/Roaming/Microsoft/Windows/Start Menu");
@@ -37,8 +38,8 @@ private:
 	void setPaths();
 	void loadFiles(QString directoryPath);
 	void loadFile(QFileInfo fileInfo);
-	void WriteLog(QString text);
 	HICON loadHIcon(QString filePath);
+	QIcon loadIcon(QString filePath);
 	void loadHIcons();
 	void releaseHIcons();
 	void writeLog(QString text);

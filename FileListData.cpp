@@ -68,12 +68,9 @@ HICON FileListData::loadHIcon(QString filePath)
 	filePath.toWCharArray(filePathWideChars);
 	filePathWideChars[filePath.length()] = 0;
 	auto fileInfo = new SHFILEINFO();
-	if (SHGetFileInfoW(filePathWideChars, FILE_ATTRIBUTE_NORMAL, fileInfo, sizeof(SHFILEINFO), SHGFI_SYSICONINDEX))
+	if (SHGetFileInfoW(filePathWideChars, FILE_ATTRIBUTE_NORMAL, fileInfo, sizeof(SHFILEINFO), SHGFI_ICON | SHGFI_LARGEICON))
 	{
-		HIMAGELIST* imageList;
-		SHGetImageList(SHIL_LARGE, IID_IImageList, (void**)&imageList);
-		((IImageList*)imageList)->GetIcon(fileInfo->iIcon, ILD_TRANSPARENT, &result);
-		CloseHandle(imageList);
+		result = fileInfo->hIcon;
 	}
 	delete[] filePathWideChars;
 	delete fileInfo;
