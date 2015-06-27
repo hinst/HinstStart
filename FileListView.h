@@ -19,6 +19,8 @@ protected:
 	void keyPressEvent(QKeyEvent *event) override;
 private:
 	void writeLog(QString text);
+	// Delta should be +1 for down key, -1 for up key.
+	void moveSelection(int delta);
 };
 
 #endif // FILELISTVIEW_H

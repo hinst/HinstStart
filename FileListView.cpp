@@ -15,17 +15,30 @@ void FileListView::keyPressEvent(QKeyEvent *event)
 	}
 	if (event->key() == Qt::Key_Down)
 	{
-		auto selectedIndexes = this->selectionModel()->selection().indexes();
-		if (selectedIndexes.count() > 0)
-		{
-			auto selectedIndex = selectedIndexes[0];
-			this->selectRow(selectedIndex.row() + 1);
-		}
+		moveSelection(1);
+	}
+	if (event->key() == Qt::Key_Up)
+	{
+		moveSelection(-1);
 	}
 }
 
 void FileListView::writeLog(QString text)
 {
 	CommonLog::write(QString("FileListView: ") + text);
+}
+
+void FileListView::moveSelection(int delta)
+{
+	auto selectedIndexes = this->selectionModel()->selection().indexes();
+	if (selectedIndexes.count() > 0)
+	{
+		auto selectedIndex = selectedIndexes[0];
+		auto newSelectedRowIndex = selectedIndex.row() + delta;
+		if (0 <= newSelectedRowIndex && newSelectedRowIndex < this->model()->rowCount())
+		{
+			this->selectRow(newSelectedRowIndex);
+		}
+	}
 }
 
