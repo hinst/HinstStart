@@ -13,11 +13,6 @@
 #include <QThread>
 #include <windows.h>
 #include <QtWinExtras/QtWin>
-#include <shlobj.h>
-#include <shellapi.h>
-#include <shlguid.h>
-#include <commctrl.h>
-#include <commoncontrols.h>
 #include "CommonLog.h"
 
 const QString UserStartMenuSubPath("AppData/Roaming/Microsoft/Windows/Start Menu");
