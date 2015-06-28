@@ -26,7 +26,14 @@ bool ImprovedSortFilterProxyModel::lessThan(const QModelIndex &left, const QMode
 			auto rightIndex = rightString.indexOf(currentFilterFixedString, 0, Qt::CaseInsensitive);
 			if (leftIndex >= 0 && rightIndex >= 0)
 			{
-				result = leftIndex < rightIndex;
+				if (leftIndex == 0 && rightIndex == 0)
+				{
+					result = leftString.length() < rightString.length();
+				}
+				else
+				{
+					result = leftIndex < rightIndex;
+				}
 			}
 		}
 	}
