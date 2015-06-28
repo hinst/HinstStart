@@ -23,6 +23,7 @@
 #include "CommonLog.h"
 #include "ImprovedSortFilterProxyModel.h"
 #include "FileListView.h"
+#include "SearchFileListLineEdit.h"
 
 class StarterWindow : public QMainWindow
 {
@@ -49,7 +50,7 @@ private:
 	QFrame *progressWidget;
 	QLabel *progressLabel;
 	QProgressBar *progressBar;
-	QLineEdit* searchLineEdit;
+	SearchFileListLineEdit* searchLineEdit;
 	void writeLog(QString text);
 	static QEvent::Type fileListLoadingProgressEventType();
 	static QEvent::Type listEnterEventType();

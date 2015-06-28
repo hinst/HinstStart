@@ -6,8 +6,10 @@ StarterWindow::StarterWindow(QWidget *parent)
 	rootWidget = new QWidget(this);
 	setCentralWidget(rootWidget);
 	rootLayout = new QVBoxLayout(rootWidget);
-	searchLineEdit = new QLineEdit(this);
+	searchLineEdit = new SearchFileListLineEdit(this);
 	searchLineEdit->setFont(CommonUI::globalObject.fixedFont());
+	searchLineEdit->keyEventReceiver = this;
+	searchLineEdit->keyDownEventType = searchFileLineEditKeyDownEventType();
 	rootLayout->addWidget(searchLineEdit);
 	progressWidget = new QFrame(this);
 	progressLayout = new QHBoxLayout(progressWidget);
