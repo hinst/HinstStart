@@ -55,11 +55,13 @@ private:
 	static QEvent::Type fileListLoadingProgressEventType();
 	static QEvent::Type listEnterEventType();
 	static QEvent::Type searchFileLineEditKeyDownEventType();
+	static QEvent::Type fileListKeyUpEventType();
     void receiveFileList(std::shared_ptr<FileListData> fileListData);
 	void loadFileListView();
 	void receiveFileListProgressEvent(FileListDataLoader::ProgressEvent *event);
 	void receiveListEnterEvent();
 	void receiveSearchFileLineEditKeyDownEvent();
+	void receiveFileListKeyUpEvent();
 	void startFile(const QModelIndex& modelIndex);
 };
 

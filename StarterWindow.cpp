@@ -33,6 +33,7 @@ StarterWindow::StarterWindow(QWidget *parent)
 	QObject::connect(fileListView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(receiveFileListViewDoubleClicked(QModelIndex)));
 	fileListView->keyEventReceiver = this;
 	fileListView->keyEnterEventType = this->listEnterEventType();
+	fileListView->keyUpEventType = this->fileListKeyUpEventType();
 	fileListViewModel = nullptr;
 	sortFilterProxyModel = nullptr;
 	rootLayout->addWidget(fileListView);
@@ -90,6 +91,11 @@ bool StarterWindow::event(QEvent *event)
 		receiveSearchFileLineEditKeyDownEvent();
 		result = true;
 	}
+	else if (event->type() == fileListKeyUpEventType())
+	{
+		receiveFileListKeyUpEvent();
+		result = true;
+	}
     else
     {
         result = this->QMainWindow::event(event);
@@ -124,6 +130,11 @@ QEvent::Type StarterWindow::listEnterEventType()
 QEvent::Type StarterWindow::searchFileLineEditKeyDownEventType()
 {
 	return (QEvent::Type)(QEvent::User + 3);
+}
+
+QEvent::Type StarterWindow::fileListKeyUpEventType()
+{
+	return (QEvent::Type)(QEvent::User + 4);
 }
 
 void StarterWindow::receiveFileList(std::shared_ptr<FileListData> fileListData)
@@ -197,6 +208,11 @@ void StarterWindow::receiveSearchFileLineEditKeyDownEvent()
 			fileListView->selectRow(0);
 		}
 	}
+}
+
+void StarterWindow::receiveFileListKeyUpEvent()
+{
+	searchLineEdit->setFocus();
 }
 
 void StarterWindow::unloadFileList()

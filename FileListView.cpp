@@ -9,8 +9,11 @@ void FileListView::keyPressEvent(QKeyEvent *event)
 {
 	if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
 	{
-		auto event = new QEvent(keyEnterEventType);
-		QCoreApplication::postEvent(keyEventReceiver, event);
+		if (keyEventReceiver != nullptr)
+		{
+			auto event = new QEvent(keyEnterEventType);
+			QCoreApplication::postEvent(keyEventReceiver, event);
+		}
 	}
 	else if (event->key() == Qt::Key_Down)
 	{
@@ -18,7 +21,15 @@ void FileListView::keyPressEvent(QKeyEvent *event)
 	}
 	else if (event->key() == Qt::Key_Up)
 	{
-		moveSelection(-1);
+		auto moved = moveSelection(-1);
+		if (false == moved)
+		{
+			if (keyEventReceiver != nullptr)
+			{
+				auto event = new QEvent(keyUpEventType);
+				QCoreApplication::postEvent(keyEventReceiver, event);
+			}
+		}
 	}
 	else
 	{
@@ -31,8 +42,9 @@ void FileListView::writeLog(QString text)
 	CommonLog::write(QString("FileListView: ") + text);
 }
 
-void FileListView::moveSelection(int delta)
+bool FileListView::moveSelection(int delta)
 {
+	auto result = false;
 	auto selectedIndexes = this->selectionModel()->selection().indexes();
 	if (selectedIndexes.count() > 0)
 	{
@@ -41,7 +53,9 @@ void FileListView::moveSelection(int delta)
 		if (0 <= newSelectedRowIndex && newSelectedRowIndex < this->model()->rowCount())
 		{
 			this->selectRow(newSelectedRowIndex);
+			result = true;
 		}
 	}
+	return result;
 }
 
