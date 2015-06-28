@@ -31,3 +31,8 @@ HEADERS  += StarterWindow.h \
     ImprovedSortFilterProxyModel.h \
     FileListView.h \
     SearchFileListLineEdit.h
+
+DISTFILES += \
+    ResourceFile.rc
+
+RC_FILE = ResourceFile.rc
