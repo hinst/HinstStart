@@ -5,7 +5,9 @@
 #-------------------------------------------------
 
 QT += core gui widgets winextras
-CONFIG += console
+CONFIG(debug, debug|release) {
+    CONFIG += console
+}
 CONFIG += c++11
 
 TARGET = HinstStart
