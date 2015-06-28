@@ -70,6 +70,7 @@ void StarterWindow::startFile(const QModelIndex &modelIndex)
 		auto filePath = QString("file:///") + file.filePath();
 		auto fileUrl = QUrl(filePath);
 		QDesktopServices::openUrl(fileUrl);
+		this->close();
 	}
 }
 
@@ -100,7 +101,15 @@ bool StarterWindow::event(QEvent *event)
     {
         result = this->QMainWindow::event(event);
     }
-    return result;
+	return result;
+}
+
+void StarterWindow::keyPressEvent(QKeyEvent *event)
+{
+	if (event->key() == Qt::Key_Escape)
+	{
+		this->close();
+	}
 }
 
 void StarterWindow::loadFileList()

@@ -39,6 +39,7 @@ public slots:
 	void receiveFileListViewDoubleClicked(const QModelIndex& modelIndex);
 protected:
     bool event(QEvent *event) override;
+	void keyPressEvent(QKeyEvent *event) override;
 private:
 	FileListView *fileListView;
 	FileListViewModel *fileListViewModel;
