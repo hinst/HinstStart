@@ -114,6 +114,11 @@ QEvent::Type StarterWindow::listEnterEventType()
 	return (QEvent::Type)(QEvent::User + 2);
 }
 
+QEvent::Type StarterWindow::searchFileLineEditKeyDownEventType()
+{
+	return (QEvent::Type)(QEvent::User + 3);
+}
+
 void StarterWindow::receiveFileList(std::shared_ptr<FileListData> fileListData)
 {
 	writeLog("Now receiving file list...");

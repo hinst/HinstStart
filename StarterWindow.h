@@ -36,7 +36,6 @@ public:
 public slots:
 	void receiveSearchLineEditTextChanged(const QString &text);
 	void receiveFileListViewDoubleClicked(const QModelIndex& modelIndex);
-	void startFile(const QModelIndex& modelIndex);
 protected:
     bool event(QEvent *event) override;
 private:
@@ -54,10 +53,12 @@ private:
 	void writeLog(QString text);
 	static QEvent::Type fileListLoadingProgressEventType();
 	static QEvent::Type listEnterEventType();
+	static QEvent::Type searchFileLineEditKeyDownEventType();
     void receiveFileList(std::shared_ptr<FileListData> fileListData);
 	void loadFileListView();
 	void receiveFileListProgressEvent(FileListDataLoader::ProgressEvent *event);
 	void receiveListEnterEvent();
+	void startFile(const QModelIndex& modelIndex);
 };
 
 #endif // STARTERWINDOW_H
