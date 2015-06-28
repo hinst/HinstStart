@@ -12,5 +12,9 @@ void SearchFileListLineEdit::keyPressEvent(QKeyEvent *event)
 		auto event = new QEvent(keyDownEventType);
 		QCoreApplication::postEvent(keyEventReceiver, event);
 	}
+	else
+	{
+		this->QLineEdit::keyPressEvent(event);
+	}
 }
 

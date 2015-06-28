@@ -12,13 +12,17 @@ void FileListView::keyPressEvent(QKeyEvent *event)
 		auto event = new QEvent(keyEnterEventType);
 		QCoreApplication::postEvent(keyEventReceiver, event);
 	}
-	if (event->key() == Qt::Key_Down)
+	else if (event->key() == Qt::Key_Down)
 	{
 		moveSelection(1);
 	}
-	if (event->key() == Qt::Key_Up)
+	else if (event->key() == Qt::Key_Up)
 	{
 		moveSelection(-1);
+	}
+	else
+	{
+		this->QTableView::keyPressEvent(event);
 	}
 }
 

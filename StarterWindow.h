@@ -59,6 +59,7 @@ private:
 	void loadFileListView();
 	void receiveFileListProgressEvent(FileListDataLoader::ProgressEvent *event);
 	void receiveListEnterEvent();
+	void receiveSearchFileLineEditKeyDownEvent();
 	void startFile(const QModelIndex& modelIndex);
 };
 

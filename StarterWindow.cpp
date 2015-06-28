@@ -85,6 +85,11 @@ bool StarterWindow::event(QEvent *event)
 		receiveListEnterEvent();
 		result = true;
 	}
+	else if (event->type() == searchFileLineEditKeyDownEventType())
+	{
+		receiveSearchFileLineEditKeyDownEvent();
+		result = true;
+	}
     else
     {
         result = this->QMainWindow::event(event);
@@ -179,6 +184,16 @@ void StarterWindow::receiveListEnterEvent()
 		auto selectedIndex = selectedIndexes[i];
 		startFile(selectedIndex);
 		break;
+	}
+}
+
+void StarterWindow::receiveSearchFileLineEditKeyDownEvent()
+{
+	fileListView->setFocus();
+	if (fileListView->model() != nullptr)
+	{
+		if (fileListView->model()->rowCount() > 0)
+			fileListView->selectRow(0);
 	}
 }
 
