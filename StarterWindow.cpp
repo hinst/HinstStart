@@ -193,7 +193,9 @@ void StarterWindow::receiveSearchFileLineEditKeyDownEvent()
 	if (fileListView->model() != nullptr)
 	{
 		if (fileListView->model()->rowCount() > 0)
+		{
 			fileListView->selectRow(0);
+		}
 	}
 }
 
