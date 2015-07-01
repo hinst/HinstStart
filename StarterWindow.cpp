@@ -157,7 +157,6 @@ void StarterWindow::receiveFileList(std::shared_ptr<FileListData> fileListData)
 	sortFilterProxyModel->setFilterKeyColumn(0);
     sortFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 	loadFileListView();
-	progressWidget->setVisible(false);
 	sortFilterProxyModel->setFilterFixedString(searchLineEdit->text());
 	this->fileListData = fileListData;
 }
@@ -174,7 +173,7 @@ void StarterWindow::receiveFileListProgressEvent(FileListDataLoader::ProgressEve
 {
 	if (event->subType == FileListDataLoader::ProgressEvent::Finished)
 	{
-		receiveFileList(event->fileListData);
+		progressWidget->setVisible(false);
 		event->thread->wait();
 		delete event->thread;
 	}
@@ -184,6 +183,9 @@ void StarterWindow::receiveFileListProgressEvent(FileListDataLoader::ProgressEve
 	}
 	else if (event->subType == FileListDataLoader::ProgressEvent::IconLoaded)
 	{
+		if (event->count == 1) {
+			receiveFileList(event->fileListData);
+		}
 		auto fileCount = event->fileListData->files.count();
 		auto iconCount = event->count;
 		progressLabel->setText("Loading icons: " + QString::number(iconCount) + " of " + QString::number(fileCount) + "...");
@@ -191,8 +193,12 @@ void StarterWindow::receiveFileListProgressEvent(FileListDataLoader::ProgressEve
 		{
 			progressBar->setMaximum(fileCount);
 		}
-		progressBar->setValue(event->count);
+		progressBar->setValue(iconCount);
 		event->fileListData->burnIcon(iconCount - 1);
+		if (fileListViewModel != nullptr)
+		{
+			fileListViewModel->notifyIconChanged(iconCount - 1);
+		}
 	}
 }
 
