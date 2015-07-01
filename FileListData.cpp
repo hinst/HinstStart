@@ -74,6 +74,7 @@ HICON FileListData::loadHIcon(QString filePath)
 	}
 	delete[] filePathWideChars;
 	delete fileInfo;
+	Sleep(30);
 	return result;
 }
 
