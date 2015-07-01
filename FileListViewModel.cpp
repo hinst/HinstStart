@@ -38,7 +38,7 @@ QVariant FileListViewModel::data(const QModelIndex &index, int role) const
 			}
 			else if (role == Qt::DecorationRole)
 			{
-				if (fileListData->icons.count() > 0)
+				if (rowIndex < fileListData->icons.count())
 				{
 					result = fileListData->icons[rowIndex];
 				}
@@ -102,5 +102,11 @@ QString FileListViewModel::dataFilePath(const QModelIndex &index, int role) cons
 	}
 	filePath = filePath.replace('/', '\\');
 	return filePath;
+}
+
+void FileListViewModel::notifyIconChanged(int rowIndex)
+{
+	auto index = createIndex(rowIndex, 0, nullptr);
+	emit dataChanged(index, index);
 }
 
