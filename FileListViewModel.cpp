@@ -107,6 +107,7 @@ QString FileListViewModel::dataFilePath(const QModelIndex &index, int role) cons
 void FileListViewModel::notifyIconChanged(int rowIndex)
 {
 	auto index = createIndex(rowIndex, 0, nullptr);
-	emit dataChanged(index, index);
+	QVector<int> roles({Qt::DecorationRole});
+	emit dataChanged(index, index, roles);
 }
 
